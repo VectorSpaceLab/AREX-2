@@ -37,6 +37,7 @@ from openai import AsyncOpenAI
 from tqdm.asyncio import tqdm_asyncio
 
 from tools import read_url_jina, read_url_with_fallback, search_serper
+from web_blocklist import is_common_blocked_url
 
 import os as _os
 _os.environ.setdefault("HF_ENDPOINT", "https://hf-mirror.com")
@@ -137,6 +138,8 @@ def _normalize_blocklist_url(text: str) -> str:
 def _is_blocked_url(url: str) -> bool:
     if not url:
         return False
+    if is_common_blocked_url(url):
+        return True
     normalized_url = _normalize_blocklist_url(url)
     return any(p in normalized_url for p in _NORMALIZED_HLE_URL_BLOCKLIST_PATTERNS)
 

@@ -20,6 +20,11 @@ from hle_vendor.visit_fallback import (
     fetch_url_with_fallback,
     format_visit_failure,
 )
+from hle_vendor.web_blocklist import (
+    WEB_BLOCK_NOTICE,
+    filter_search_results as filter_blocked_search_results,
+    is_blocked_web_url,
+)
 from web_provider import (
     JINA_API_KEY,
     JINA_API_URL,
@@ -201,9 +206,20 @@ async def search_serper(query: str, page_num: int = 1, use_scholar: bool = False
 
     return await _run_with_retries("search", query, _search_once, base_delay=1, max_delay=5, pretty_case_key=pretty_case_key)
 
-async def search(query: str, serper_client: httpx.AsyncClient=None, page_id_to_url={}, page_url_to_id={}, use_scholar: bool = False, page_num: int = 1, pretty_case_key: Optional[str] = None, leak_filter: Optional[str] = None):
+async def search(
+    query: str,
+    serper_client: httpx.AsyncClient = None,
+    page_id_to_url={},
+    page_url_to_id={},
+    use_scholar: bool = False,
+    page_num: int = 1,
+    pretty_case_key: Optional[str] = None,
+    leak_filter: Optional[str] = None,
+    dataset_name: Optional[str] = None,
+):
     try:
         results = await search_serper(query=query, client=serper_client, use_scholar=use_scholar, page_num=page_num, pretty_case_key=pretty_case_key)
+        results = filter_blocked_search_results(results, dataset_name)
         results = filter_search_results(results, leak_filter)
         page_num_for_header = page_num
         if "organic" not in results or not results.get("organic"):
@@ -517,9 +533,13 @@ async def readpage_jina(
     extractor_prompt: str = DEFAULT_EXTRACTOR_PROMPT,
     pretty_case_key: Optional[str] = None,
     leak_filter: Optional[str] = None,
+    dataset_name: Optional[str] = None,
     summary_enable_thinking: Optional[bool] = True,
     enable_visit_fallback: bool = True,
 ) -> str:
+    if is_blocked_web_url(url, dataset_name):
+        get_pretty_console().warning(f"[visit blocked] built-in web blocklist: {url}", pretty_case_key)
+        return WEB_BLOCK_NOTICE
     if is_blocked_reference(url, leak_filter):
         get_pretty_console().warning(f"[visit blocked] benchmark leak source: {url}", pretty_case_key)
         return LEAK_BLOCK_NOTICE
@@ -650,6 +670,7 @@ class LocalSearch:
         attachment_root: Optional[str] = None,
         pretty_case_key: Optional[str] = None,
         leak_filter: Optional[str] = None,
+        dataset_name: Optional[str] = None,
         summary_enable_thinking: Optional[bool] = True,
         enable_visit_fallback: bool = True,
     ):
@@ -666,6 +687,7 @@ class LocalSearch:
         self.attachment_root = attachment_root
         self.pretty_case_key = pretty_case_key
         self.leak_filter = leak_filter
+        self.dataset_name = dataset_name
         self.summary_enable_thinking = summary_enable_thinking
         self.enable_visit_fallback = enable_visit_fallback
         if leak_filter_enabled(self.leak_filter):
@@ -748,6 +770,7 @@ class LocalSearch:
                     page_num=_normalize_page_num(page),
                     pretty_case_key=self.pretty_case_key,
                     leak_filter=self.leak_filter,
+                    dataset_name=self.dataset_name,
                 )
             elif isinstance(query, list):
                 page_nums = _expand_page_nums(page, len(query))
@@ -760,6 +783,7 @@ class LocalSearch:
                         page_num=page_num,
                         pretty_case_key=self.pretty_case_key,
                         leak_filter=self.leak_filter,
+                        dataset_name=self.dataset_name,
                     )
                     for q, page_num in zip(query, page_nums)
                 ))
@@ -773,6 +797,7 @@ class LocalSearch:
                     self.page_url_to_id,
                     pretty_case_key=self.pretty_case_key,
                     leak_filter=self.leak_filter,
+                    dataset_name=self.dataset_name,
                 )
         elif name == 'google_scholar':
             try:
@@ -794,16 +819,16 @@ class LocalSearch:
                     except:
                         pass
             if isinstance(query, str):
-                response = await search(query, self.search_client, self.page_id_to_url, self.page_url_to_id, use_scholar=True, pretty_case_key=self.pretty_case_key, leak_filter=self.leak_filter)
+                response = await search(query, self.search_client, self.page_id_to_url, self.page_url_to_id, use_scholar=True, pretty_case_key=self.pretty_case_key, leak_filter=self.leak_filter, dataset_name=self.dataset_name)
             elif isinstance(query, list):
                 responses = await asyncio.gather(*(
-                    search(q, self.search_client, self.page_id_to_url, self.page_url_to_id, use_scholar=True, pretty_case_key=self.pretty_case_key, leak_filter=self.leak_filter)
+                    search(q, self.search_client, self.page_id_to_url, self.page_url_to_id, use_scholar=True, pretty_case_key=self.pretty_case_key, leak_filter=self.leak_filter, dataset_name=self.dataset_name)
                     for q in query
                 ))
                 response = "\n=======\n".join(responses)
             else:
                 get_pretty_console().error(f"[ERROR] Invalid query type for google_scholar: {type(query)}, value: {query}", self.pretty_case_key)
-                response = await search(str(query), self.search_client, self.page_id_to_url, self.page_url_to_id, use_scholar=True, pretty_case_key=self.pretty_case_key, leak_filter=self.leak_filter)
+                response = await search(str(query), self.search_client, self.page_id_to_url, self.page_url_to_id, use_scholar=True, pretty_case_key=self.pretty_case_key, leak_filter=self.leak_filter, dataset_name=self.dataset_name)
                        
         elif name == 'visit':
             try:
@@ -855,6 +880,8 @@ class LocalSearch:
                 return error_msg
 
             for u in visit_urls:
+                if is_blocked_web_url(u, self.dataset_name):
+                    get_pretty_console().warning(f"[visit blocked] built-in web blocklist: {u}", self.pretty_case_key)
                 if is_blocked_reference(u, self.leak_filter):
                     get_pretty_console().warning(f"[visit blocked] benchmark leak source: {u}", self.pretty_case_key)
                 if u not in self.page_url_to_id:
@@ -870,6 +897,7 @@ class LocalSearch:
                     self.extractor_prompt,
                     pretty_case_key=self.pretty_case_key,
                     leak_filter=self.leak_filter,
+                    dataset_name=self.dataset_name,
                     summary_enable_thinking=self.summary_enable_thinking,
                     enable_visit_fallback=self.enable_visit_fallback,
                 )

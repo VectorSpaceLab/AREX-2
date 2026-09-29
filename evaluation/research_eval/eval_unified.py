@@ -632,6 +632,7 @@ async def run_one_sample(
                 attachment_root=spec.attachments_root,
                 pretty_case_key=case_key,
                 leak_filter=spec.leak_filter,
+                dataset_name=spec.name,
                 summary_enable_thinking=config.get("summary_enable_thinking"),
                 enable_visit_fallback=bool(config.get("enable_visit_fallback", True)),
             )
