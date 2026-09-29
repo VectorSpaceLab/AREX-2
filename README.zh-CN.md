@@ -117,12 +117,12 @@ MLE_BENCH=$HOME/mle-bench \
 
 ## Citation
 
-如果 AREX-2 对你的工作有帮助，请引用：
+如果 AREX 对你的工作有帮助，请引用：
 
 ```bibtex
-@article{arex2,
-  title   = {AREX-2: Advancing Self-Improving Agents through Long-Horizon Reflective Tasks},
-  author  = {AREX Team},
+@article{lu2026arex,
+  title   = {AREX: Towards a Recursively Self-Improving Agent for Deep Research},
+  author  = {Lu, Shuqi and Li, Chaofan and Luo, Kun and Zhang, Zhang and Wang, Hui and Xiao, Hongwang and Xiong, Lei and Wang, Jiahao and Wang, Sen and Jiang, Xiyan and Li, Wanli and Hu, Yuyang and Qian, Hongjin and Yan, Bingyu and Chen, Jianlyu and Xia, Ziyi and Shao, Yingxia and Liu, Kang and Dou, Zhicheng and He, Di and Ye, Qiwei and Wang, Zhongyuan and Liu, Zheng},
   journal = {arXiv preprint arXiv:2607.21461},
   year    = {2026},
   url     = {https://arxiv.org/abs/2607.21461}
