@@ -10,221 +10,208 @@
   <meta property="og:site_name" content="AREX-2">
   <meta property="og:title" content="AREX-2: Advancing Self-Improving Agents through Long-Horizon Reflective Tasks">
   <meta property="og:description" content="Learning to improve, round after round. Long-horizon reflection learned in coding tasks carries over to deep research.">
-  <meta property="og:image" content="https://vectorspacelab.github.io/AREX-2/media/arex-preview.png">
+  <meta property="og:image" content="https://vectorspacelab.github.io/AREX-2/media/arex-2-framework.svg">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
   <meta property="og:image:alt" content="AREX geometric logo">
   <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:image" content="https://vectorspacelab.github.io/AREX-2/media/arex-preview.png">
+  <meta name="twitter:image" content="https://vectorspacelab.github.io/AREX-2/media/arex-2-framework.svg">
   <meta name="twitter:image:alt" content="AREX geometric logo">
   <link rel="icon" type="image/png" sizes="32x32" href="media/arex-favicon.png">
   <link rel="apple-touch-icon" sizes="180x180" href="media/arex-touch-icon.png">
+  <link rel="preload" href="fonts/manrope-latin.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="media/arex-v2-benchmark-results.svg" as="image">
   <link rel="stylesheet" href="styles.css">
+  <script src="app.js" defer></script>
 </head>
 <body>
-  <a class="skip-link" href="#research">Skip to research</a>
+  <a class="skip-link" href="#main-content">Skip to content</a>
+
   <header class="site-header">
-    <div class="page header-inner">
-      <a class="brand" href="#top" aria-label="AREX-2 home"><img class="brand-mark" src="media/arex-mark.png" width="36" height="36" alt=""><span>AREX-2</span></a>
+    <div class="nav-shell">
+      <a class="wordmark" href="#top" aria-label="AREX-2 home">
+        <img src="media/arex-mark.png" width="30" height="30" alt="">
+        <span>AREX<span class="wordmark-version">-2</span></span>
+      </a>
       <nav class="site-nav" aria-label="Primary navigation">
-        <a href="#research">Research</a>
-        <a href="#data">Training data</a>
         <a href="#results">Results</a>
+        <a href="#idea">The idea</a>
+        <a href="#framework">Training</a>
         <a href="#demo">Demo</a>
       </nav>
-      <div class="header-actions">
-        <a class="small-button small-button--accent" href="https://huggingface.co/collections/BAAI/arex-2" target="_blank" rel="noopener">Models <span aria-hidden="true">↗</span></a>
-        <a class="small-button" href="https://github.com/VectorSpaceLab/AREX-2" target="_blank" rel="noopener">GitHub <span aria-hidden="true">↗</span></a>
-        <button class="small-button" type="button" disabled aria-label="Paper link will be added later">Paper <span class="soon">soon</span></button>
-      </div>
+      <a class="header-app-link" href="https://huggingface.co/collections/BAAI/arex-2" target="_blank" rel="noopener noreferrer">
+        Models <span aria-hidden="true">↗</span>
+      </a>
     </div>
   </header>
 
-  <main id="top">
-    <section class="hero" aria-labelledby="hero-title">
-      <div class="hero-pin"><div class="page">
-      <div class="hero-kicker"><span class="status-dot" aria-hidden="true"></span>AREX-2 <span class="kicker-divider" aria-hidden="true">/</span> Long-horizon reflection</div>
-      <div class="hero-grid">
-        <div class="hero-copy">
-          <h1 id="hero-title">Advancing <em>Self-Improving Agents</em> <span class="hero-title-tail">through Long-Horizon Reflective Tasks</span></h1>
-          <p class="hero-lede">AREX-2 learns to sustain self-improvement from long-horizon reflective trajectories, with gains that transfer from coding tasks to deep research.</p>
-          <div class="hero-links">
-            <a class="button" href="#research">Explore the research <span aria-hidden="true">↓</span></a>
-            <a class="button button--secondary" href="#results">View results <span aria-hidden="true">↓</span></a>
+  <main id="main-content">
+    <section class="hero" id="top" aria-labelledby="hero-title">
+      <div class="hero-shell">
+        <header class="hero-copy">
+          <div class="hero-brand">
+            <img src="media/arex-mark.png" width="25" height="25" alt="">
+            <span>AREX-2</span>
           </div>
+          <h1 class="hero-title" id="hero-title" aria-label="AREX-2: Advancing Self-Improving Agents through Long-Horizon Reflective Tasks">
+            <span class="typing-reserve" aria-hidden="true">Advancing Self-Improving Agents<br class="title-break"> through Long-Horizon Reflective Tasks.</span>
+            <span class="typing-line" aria-hidden="true"><span id="typed-phrase">Advancing Self-Improving Agents<br class="title-break"> through Long-Horizon Reflective Tasks.</span><span class="typing-caret"></span></span>
+          </h1>
+          <p class="hero-note">Learning to improve, round after round. Long-horizon reflection learned in coding tasks carries over to deep research.</p>
+        </header>
+
+        <figure class="results-figure" id="results">
+          <div class="figure-viewport results-viewport" tabindex="0" role="region" aria-label="Scrollable benchmark results figure">
+            <!-- Source: assets/performance/arex-v2-benchmark-results.svg. -->
+            <img src="media/arex-v2-benchmark-results.svg" width="720" height="340"
+              alt="AREX-2 (27B) benchmark results: BrowseComp 84.0, text-only HLE 52.6, Frontier-CS 70.7, DeepSearchQA 93.8, GAIA 92.2, and MLE-bench Lite 81.8, compared with selected open- and closed-weight models."
+              fetchpriority="high" loading="eager">
+          </div>
+          <figcaption>
+            <span>Six evaluations of coding, deep research, and agentic reasoning.</span>
+            <span class="figure-meta">AREX-2 · 27B</span>
+            <span class="figure-note">MLE-Lite: Any Medal, averaged over three seeds, with skills. DeepSearchQA: F1. HLE: text-only, except GPT-5.5 (full set).</span>
+          </figcaption>
+          <p class="figure-scroll-hint">Scroll horizontally to explore the figure <span aria-hidden="true">↔</span></p>
+        </figure>
+
+        <a class="section-cue" href="#idea"><span>What self-improvement means</span><span aria-hidden="true">↓</span></a>
+      </div>
+    </section>
+
+    <section class="idea-section" id="idea" aria-labelledby="concept-title">
+      <div class="section-shell idea-layout">
+        <div class="idea-copy" id="research">
+          <p class="eyebrow">Self-improvement at test time</p>
+          <h2 id="concept-title">Agents that improve<br><em>within the task.</em></h2>
+          <p class="idea-intro">Given more rounds on the same problem, an agent should turn them into a better solution by its own judgment of what to change.</p>
+          <div class="idea-definitions">
+            <p><strong>Reflection</strong> guides the next revision.</p>
+            <p><strong>Long-horizon execution</strong> keeps the loop productive.</p>
+          </div>
+          <p class="idea-intro">Together, they make progress accumulate: useful findings carry forward, and the agent recovers from setbacks to keep improving.</p>
         </div>
-        <figure class="hero-chart" aria-label="An abstract curve of sustained improvement, animated over five seconds">
-          <svg class="progress-illustration" viewBox="0 0 480 360" role="img" aria-labelledby="progress-description">
-            <title id="progress-description">Sustained iteration leads to progress over time</title>
-            <defs><linearGradient id="progress-fill" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#c7432b" stop-opacity=".15"/><stop offset="100%" stop-color="#c7432b" stop-opacity="0"/></linearGradient><clipPath id="progress-clip"><rect id="progress-reveal" x="30" y="0" width="410" height="320"/></clipPath></defs>
-            <g class="progress-grid" aria-hidden="true"><path d="M32 70H448M32 150H448M32 230H448M32 310H448"/></g>
-            <path class="progress-axis" d="M32 26V318H452" aria-hidden="true"/>
-            <text class="progress-axis-label" x="242" y="346" text-anchor="middle">Long-Horizon</text><text class="progress-axis-label" transform="translate(13 172) rotate(-90)" text-anchor="middle">Score</text>
-            <path class="progress-track" d="M32 310C68 310 66 270 104 270S141 248 163 248S197 232 214 218S235 190 265 190S284 133 319 133S350 114 370 97S405 65 438 34" aria-hidden="true"/>
-            <path class="progress-area" clip-path="url(#progress-clip)" d="M32 310C68 310 66 270 104 270S141 248 163 248S197 232 214 218S235 190 265 190S284 133 319 133S350 114 370 97S405 65 438 34V318H32Z" aria-hidden="true"/>
-            <path id="progress-curve" class="progress-curve" d="M32 310C68 310 66 270 104 270S141 248 163 248S197 232 214 218S235 190 265 190S284 133 319 133S350 114 370 97S405 65 438 34" aria-hidden="true"/>
-            <path id="progress-cursor" class="progress-cursor" d="M438 34V318" aria-hidden="true"/>
-            <circle id="progress-halo" class="progress-halo" cx="438" cy="34" r="12" aria-hidden="true"/>
-            <circle id="progress-dot" class="progress-dot" cx="438" cy="34" r="4.5" aria-hidden="true"/>
+
+        <figure class="idea-visual" aria-label="The improvement loop and its progress over many rounds">
+          <svg class="idea-loop" viewBox="0 0 440 244" role="img" aria-labelledby="idea-loop-title idea-loop-description">
+            <title id="idea-loop-title">Try, measure, reflect, revise</title>
+            <desc id="idea-loop-description">One round of self-improvement: build a solution, read feedback, find what to change, and update the solution. Repeat the loop on the same task.</desc>
+            <defs><marker id="idea-arrow" viewBox="0 0 8 8" refX="6" refY="4" markerWidth="6" markerHeight="6" orient="auto"><path d="M1 1 6 4 1 7" fill="none" stroke="#8c95a3" stroke-width="1.3"/></marker></defs>
+            <g class="idea-loop-connectors" marker-end="url(#idea-arrow)"><path d="M166 52H264"/><path d="M352 86V146"/><path d="M274 190H176"/><path d="M88 156V96"/></g>
+            <g class="idea-loop-node" data-loop-step="0"><rect x="10" y="18" width="156" height="68" rx="5"/><text class="idea-loop-step" x="25" y="42">01</text><text class="idea-loop-name" x="49" y="43">Try</text><text class="idea-loop-detail" x="25" y="66">Build a solution</text></g>
+            <g class="idea-loop-node" data-loop-step="1"><rect x="274" y="18" width="156" height="68" rx="5"/><text class="idea-loop-step" x="289" y="42">02</text><text class="idea-loop-name" x="313" y="43">Measure</text><text class="idea-loop-detail" x="289" y="66">Read the feedback</text></g>
+            <g class="idea-loop-node idea-loop-node--accent" data-loop-step="2"><rect x="274" y="156" width="156" height="68" rx="5"/><text class="idea-loop-step" x="289" y="180">03</text><text class="idea-loop-name" x="313" y="181">Reflect</text><text class="idea-loop-detail" x="289" y="204">Find what to change</text></g>
+            <g class="idea-loop-node" data-loop-step="3"><rect x="10" y="156" width="156" height="68" rx="5"/><text class="idea-loop-step" x="25" y="180">04</text><text class="idea-loop-name" x="49" y="181">Revise</text><text class="idea-loop-detail" x="25" y="204">Update the solution</text></g>
+            <text class="idea-loop-center" x="220" y="118" text-anchor="middle">LEARN FROM</text><text class="idea-loop-center" x="220" y="135" text-anchor="middle">EACH ROUND</text>
+          </svg>
+
+          <div class="iteration-bridge" aria-hidden="true"><span>Over many rounds</span><span>↓</span></div>
+
+          <svg class="progress-illustration" viewBox="0 0 480 290" role="img" aria-labelledby="progress-title progress-description">
+            <title id="progress-title">Sustained iteration turns more rounds into a better solution</title>
+            <desc id="progress-description">An animated score curve rising over repeated rounds, with plateaus between improvements.</desc>
+            <defs><linearGradient id="progress-fill" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#2d6fb4" stop-opacity=".15"/><stop offset="100%" stop-color="#2d6fb4" stop-opacity="0"/></linearGradient><clipPath id="progress-clip"><rect id="progress-reveal" x="30" y="0" width="410" height="320"/></clipPath></defs>
+            <g transform="scale(1 .8)" aria-hidden="true">
+              <g class="progress-grid"><path d="M32 70H448M32 150H448M32 230H448M32 310H448"/></g>
+              <path class="progress-axis" d="M32 26V318H452"/>
+              <path class="progress-track" d="M32 310C68 310 66 270 104 270S141 248 163 248S197 232 214 218S235 190 265 190S284 133 319 133S350 114 370 97S405 65 438 34"/>
+              <path class="progress-area" clip-path="url(#progress-clip)" d="M32 310C68 310 66 270 104 270S141 248 163 248S197 232 214 218S235 190 265 190S284 133 319 133S350 114 370 97S405 65 438 34V318H32Z"/>
+              <path id="progress-curve" class="progress-curve" d="M32 310C68 310 66 270 104 270S141 248 163 248S197 232 214 218S235 190 265 190S284 133 319 133S350 114 370 97S405 65 438 34"/>
+              <path id="progress-cursor" class="progress-cursor" d="M438 34V318"/>
+              <circle id="progress-halo" class="progress-halo" cx="438" cy="34" r="12"/>
+              <circle id="progress-dot" class="progress-dot" cx="438" cy="34" r="4.5"/>
+            </g>
+            <text class="progress-axis-label" x="32" y="13">Score</text>
+            <text class="progress-axis-label" x="242" y="281" text-anchor="middle">Rounds on the same task</text>
           </svg>
         </figure>
       </div>
-      <div class="proof-strip" aria-label="Headline benchmark results">
-        <div class="domain-coding"><strong>81.8</strong><span>MLE-bench Lite</span></div>
-        <div class="domain-coding"><strong>70.7</strong><span>Frontier-CS</span></div>
-        <div class="domain-research"><strong>84.0</strong><span>BrowseComp</span></div>
-        <p>Long-horizon reflection. <br>From coding to deep research.</p>
-      </div>
-      </div></div>
     </section>
 
-    <div class="overview-sections">
-    <section class="section research-section" id="research" aria-labelledby="research-title">
-      <div class="page">
-      <div class="section-index">01 / Research question</div>
-      <div class="section-grid">
-        <h2 id="research-title">Learning to improve,<br>round after round.</h2>
-        <div class="section-copy">
-          <p>AREX-2 learns from trajectories of attempts, feedback, and revisions to judge what to change and turn more rounds into better solutions.</p>
-          <p><strong>Reflection</strong> uses feedback to guide better revisions.<br>
-          <strong>Long-horizon execution</strong> retains useful findings and recovers from setbacks across rounds.<br>
-          <strong>Long-horizon reflection</strong> combines these capabilities to sustain improvement within a task.</p>
-        </div>
-      </div>
-      </div>
-    </section>
-
-    <section class="section idea-section" id="idea" aria-labelledby="concept-title">
-      <div class="page">
-        <div class="idea-topline"><span class="section-index">02 / The idea</span><span class="note-label">One task · Many rounds</span></div>
-        <div class="section-grid idea-layout">
-          <div class="idea-copy"><h2 id="concept-title">Agents that improve<br><em>within the task.</em></h2><p><strong>Reflection</strong> guides the next revision.<br><strong>Long-horizon execution</strong> keeps the loop productive.</p></div>
-          <div class="idea-cycle" aria-label="The self-improvement loop">
-            <svg class="idea-loop" viewBox="0 0 440 244" role="img" aria-labelledby="idea-loop-title idea-loop-description">
-              <title id="idea-loop-title">Try, measure, reflect, revise</title>
-              <desc id="idea-loop-description">Four steps form a repeating loop within one task: build a solution, read feedback, find what to change, and update the solution for the next round.</desc>
-              <defs><marker id="idea-arrow" viewBox="0 0 8 8" refX="6" refY="4" markerWidth="6" markerHeight="6" orient="auto"><path d="M1 1 6 4 1 7" fill="none" stroke="#8c95a3" stroke-width="1.3"/></marker></defs>
-              <g class="idea-loop-connectors" marker-end="url(#idea-arrow)"><path d="M166 52H264"/><path d="M352 86V146"/><path d="M274 190H176"/><path d="M88 156V96"/></g>
-              <g class="idea-loop-node"><rect x="10" y="18" width="156" height="68" rx="3"/><text class="idea-loop-step" x="25" y="42">01</text><text class="idea-loop-name" x="49" y="43">Try</text><text class="idea-loop-detail" x="25" y="66">Build a solution</text></g>
-              <g class="idea-loop-node"><rect x="274" y="18" width="156" height="68" rx="3"/><text class="idea-loop-step" x="289" y="42">02</text><text class="idea-loop-name" x="313" y="43">Measure</text><text class="idea-loop-detail" x="289" y="66">Read the feedback</text></g>
-              <g class="idea-loop-node idea-loop-node--accent"><rect x="274" y="156" width="156" height="68" rx="3"/><text class="idea-loop-step" x="289" y="180">03</text><text class="idea-loop-name" x="313" y="181">Reflect</text><text class="idea-loop-detail" x="289" y="204">Find what to change</text></g>
-              <g class="idea-loop-node"><rect x="10" y="156" width="156" height="68" rx="3"/><text class="idea-loop-step" x="25" y="180">04</text><text class="idea-loop-name" x="49" y="181">Revise</text><text class="idea-loop-detail" x="25" y="204">Update the solution</text></g>
-              <text class="idea-loop-center" x="220" y="118" text-anchor="middle">LEARN FROM</text><text class="idea-loop-center" x="220" y="135" text-anchor="middle">EACH ROUND</text>
-            </svg>
+    <section class="method-section" id="framework" aria-labelledby="framework-title">
+      <div class="section-shell">
+        <header class="section-copy" id="data">
+          <div>
+            <p class="eyebrow">Teaching long-horizon reflection</p>
+            <h2 id="framework-title">Train on the path<br>to a better solution.</h2>
           </div>
+          <p>Machine learning and algorithmic programming offer verifiable feedback and room to improve. We select whole trajectories by their final outcome and process quality, keeping failed attempts and regressions in context. Supervision focuses on decisions that diagnose, repair, and improve.</p>
+        </header>
+
+        <figure class="method-figure">
+          <div class="figure-viewport method-viewport" tabindex="0" role="region" aria-label="Scrollable AREX-2 framework figure">
+            <!-- Vector rendering of Research_Gym_0930/img/data.pdf. -->
+            <img src="media/arex-2-framework.svg" width="1496" height="592"
+              alt="AREX-2 framework. Left: construct and validate environments from GitHub repositories and online judges. Middle: an agent submits solutions, receives feedback, reflects, and improves over many rounds, acquiring operational knowledge on demand. Right: train on these trajectories so the model improves its solutions over multiple rounds at test time."
+              loading="lazy">
+          </div>
+          <p class="figure-scroll-hint">Scroll horizontally to explore the figure <span aria-hidden="true">↔</span></p>
+        </figure>
+
+        <div class="training-copy">
+          <p>These trajectories are mixed with the unchanged AREX deep-research data to fine-tune Qwen3.8-27B. The resulting AREX-2 improves over both previous AREX models on all four research benchmarks, supporting transfer beyond the domains where it learned to improve.</p>
         </div>
       </div>
     </section>
 
-    <section class="section section--tint" id="data" aria-labelledby="data-title">
-      <div class="page">
-        <div class="section-index">03 / Training data</div>
-        <div class="section-grid section-grid--data">
-          <h2 id="data-title">For coding tasks.<br>Cross-domain transfer.</h2>
-          <div class="section-copy"><p>Machine learning engineering and algorithmic programming offer verifiable feedback and room for sustained improvement. We use both to teach long-horizon reflection.</p></div>
+    <section class="resources-section" id="explore" aria-labelledby="explore-title">
+      <div class="section-shell">
+        <h2 class="eyebrow resources-title" id="explore-title">Explore AREX-2</h2>
+
+        <div class="resource-dock" id="models" aria-label="AREX-2 models, code, paper, and demo">
+          <a class="resource-card" href="https://huggingface.co/collections/BAAI/arex-2" target="_blank" rel="noopener noreferrer">
+            <span class="resource-icon resource-icon-model" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="m12 3 7 4-7 4-7-4 7-4Z"/><path d="m5 12 7 4 7-4M5 17l7 4 7-4"/></svg></span>
+            <span class="resource-copy"><small>Model · 27B parameters</small><strong>AREX-2 Models</strong><span>Explore the model collection on Hugging Face.</span></span>
+            <span class="resource-arrow" aria-hidden="true">↗</span>
+          </a>
+          <a class="resource-card" href="https://github.com/VectorSpaceLab/AREX-2" target="_blank" rel="noopener noreferrer">
+            <span class="resource-icon resource-icon-code" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="m8 7-5 5 5 5m8-10 5 5-5 5m-3-13-2 20"/></svg></span>
+            <span class="resource-copy"><small>Code &amp; evaluation</small><strong>AREX-2 on GitHub</strong><span>Explore the project and evaluation workflows.</span></span>
+            <span class="resource-arrow" aria-hidden="true">↗</span>
+          </a>
+          <a class="resource-card" href="https://huggingface.co/BAAI/AREX-2/blob/main/arex2_paper.pdf" target="_blank" rel="noopener noreferrer">
+            <span class="resource-icon resource-icon-paper" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M6 3h9l3 3v15H6V3Z"/><path d="M14 3v4h4M9 12h6M9 16h6"/></svg></span>
+            <span class="resource-copy"><small>Research paper · PDF</small><strong>AREX-2 Paper</strong><span>Advancing Self-Improving Agents through Long-Horizon Reflective Tasks.</span></span>
+            <span class="resource-arrow" aria-hidden="true">↗</span>
+          </a>
+          <a class="resource-card" href="#demo">
+            <span class="resource-icon resource-icon-demo" aria-hidden="true"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="m10 8 6 4-6 4V8Z"/></svg></span>
+            <span class="resource-copy"><small>Interactive demo · Frontier-CS 164</small><strong>Watch a solution improve</strong><span>Explore five hours of code, edits, and feedback.</span></span>
+            <span class="resource-arrow" aria-hidden="true">↓</span>
+          </a>
         </div>
-        <div class="data-method" aria-label="How the training data teaches improvement">
-          <article class="method-block">
-            <div class="method-heading">
-              <svg class="method-icon" viewBox="0 0 28 28" fill="none" aria-hidden="true"><rect x="3" y="5" width="22" height="18" rx="2"/><path d="m8 10 4 4-4 4m7 0h5"/></svg>
-              <h3>Constructing Environments</h3>
-            </div>
-            <p>A teacher model turns GitHub repositories and online-judge problems into executable environments with scoring functions.</p>
-          </article>
-          <article class="method-block">
-            <div class="method-heading">
-              <svg class="method-icon" viewBox="0 0 28 28" fill="none" aria-hidden="true"><path d="M23 11a9 9 0 0 0-16-4L4 10m0-6v6h6M5 17a9 9 0 0 0 16 4l3-3m0 6v-6h-6"/></svg>
-              <h3>Reflective trajectories</h3>
-            </div>
-            <p>A teacher agent uses feedback and operational knowledge to improve solutions over many rounds.</p>
-          </article>
-          <article class="method-block">
-            <div class="method-heading">
-              <svg class="method-icon" viewBox="0 0 28 28" fill="none" aria-hidden="true"><path d="M17 24H5V4h12l5 5v4M17 4v5h5M9 12h8m-8 4h4m3 4 3 3 6-7"/></svg>
-              <h3>Select and train</h3>
-            </div>
-            <p>Select whole trajectories by their final outcome and process quality. Train on the decisions that move the solution forward.</p>
-          </article>
-        </div>
-      </div>
-    </section>
-
-    </div>
-
-    <section class="section results" id="results" aria-labelledby="results-title">
-      <div class="page">
-        <div class="section-index">04 / Results</div>
-        <div class="section-grid results-heading">
-          <h2 id="results-title">Strong in coding.<br>Transfer to deep research.</h2>
-          <div class="section-copy"><p>AREX-2 (27B) improves over both previous AREX models on all four deep-research benchmarks, using the same deep-research training data. The results support transfer of long-horizon reflection beyond its source domains.</p></div>
-        </div>
-
-        <ul class="benchmark-legend" aria-label="Benchmark groups">
-          <li class="domain-coding">Coding · Task domain</li>
-          <li class="domain-research">Deep research · Cross-domain transfer</li>
-        </ul>
-        <div class="benchmark-grid" aria-label="AREX-2 benchmark results">
-          <article class="benchmark-card domain-coding" aria-labelledby="mle-title">
-            <div class="benchmark-head"><div><span class="benchmark-type">Coding · Task domain</span><h3 id="mle-title">MLE-bench Lite</h3></div><strong>81.8</strong></div>
-            <div class="bars" role="list" aria-label="MLE-bench Lite comparison"><div class="bar-row ours" role="listitem"><span>AREX-2</span><i style="--score:81.8%"></i><b>81.8</b></div><div class="bar-row" role="listitem"><span>GPT-5.6 Sol</span><i style="--score:72.7%"></i><b>72.7</b></div><div class="bar-row" role="listitem"><span>Kimi-K3</span><i style="--score:72.7%"></i><b>72.7</b></div><div class="bar-row" role="listitem"><span>Frontis-MA1</span><i style="--score:71.2%"></i><b>71.2</b></div><div class="bar-row" role="listitem"><span>GPT-5.5</span><i style="--score:68.2%"></i><b>68.2</b></div><div class="bar-row" role="listitem"><span>Kimi-K2.6</span><i style="--score:66.7%"></i><b>66.7</b></div><div class="bar-row" role="listitem"><span>Claude Opus 4.8</span><i style="--score:63.6%"></i><b>63.6</b></div></div>
-            <p class="benchmark-note">Any Medal · mean over three seeds · with skills</p>
-          </article>
-
-          <article class="benchmark-card domain-coding" aria-labelledby="fcs-title">
-            <div class="benchmark-head"><div><span class="benchmark-type">Coding · Task domain</span><h3 id="fcs-title">Frontier-CS</h3></div><strong>70.7</strong></div>
-            <div class="bars" role="list" aria-label="Frontier-CS comparison"><div class="bar-row" role="listitem"><span>GPT-5.6 Sol</span><i style="--score:76.4%"></i><b>76.4</b></div><div class="bar-row ours" role="listitem"><span>AREX-2</span><i style="--score:70.7%"></i><b>70.7</b></div><div class="bar-row" role="listitem"><span>Gemini-3.1-Pro</span><i style="--score:68.9%"></i><b>68.9</b></div><div class="bar-row" role="listitem"><span>Qwen3.7-Max</span><i style="--score:61.9%"></i><b>61.9</b></div><div class="bar-row" role="listitem"><span>Kimi-K2.7-Code</span><i style="--score:54.7%"></i><b>54.7</b></div><div class="bar-row" role="listitem"><span>GLM-5.3-Flash</span><i style="--score:50.4%"></i><b>50.4</b></div><div class="bar-row" role="listitem"><span>Kimi-K2.6</span><i style="--score:46.9%"></i><b>46.9</b></div></div>
-            <p class="benchmark-note">188-task Agent Track · higher is better</p>
-          </article>
-
-          <article class="benchmark-card domain-research" aria-labelledby="bc-title">
-            <div class="benchmark-head"><div><span class="benchmark-type">Deep research · Transfer</span><h3 id="bc-title">BrowseComp</h3></div><strong>84.0</strong></div>
-            <div class="bars" role="list" aria-label="BrowseComp comparison"><div class="bar-row ours" role="listitem"><span>AREX-2</span><i style="--score:84%"></i><b>84.0</b></div><div class="bar-row" role="listitem"><span>DeepSeek-V4-Pro</span><i style="--score:83.4%"></i><b>83.4</b></div><div class="bar-row" role="listitem"><span>GPT-5.6 Luna</span><i style="--score:83.3%"></i><b>83.3</b></div><div class="bar-row" role="listitem"><span>AREX (122B)</span><i style="--score:82.5%"></i><b>82.5</b></div><div class="bar-row" role="listitem"><span>Iris-mini</span><i style="--score:82.2%"></i><b>82.2</b></div><div class="bar-row" role="listitem"><span>XYZ-Aquila-mini</span><i style="--score:78.8%"></i><b>78.8</b></div><div class="bar-row" role="listitem"><span>BigBang-v1</span><i style="--score:76.5%"></i><b>76.5</b></div></div>
-            <p class="benchmark-note">Accuracy · higher is better</p>
-          </article>
-
-          <article class="benchmark-card domain-research" aria-labelledby="hle-title">
-            <div class="benchmark-head"><div><span class="benchmark-type">Deep research · Transfer</span><h3 id="hle-title">HLE</h3></div><strong>52.6</strong></div>
-            <div class="bars" role="list" aria-label="HLE comparison"><div class="bar-row ours" role="listitem"><span>AREX-2</span><i style="--score:52.6%"></i><b>52.6</b></div><div class="bar-row" role="listitem"><span>AREX (122B)</span><i style="--score:52.4%"></i><b>52.4</b></div><div class="bar-row" role="listitem"><span>Iris-mini</span><i style="--score:52.3%"></i><b>52.3</b></div><div class="bar-row" role="listitem"><span>GPT-5.5*</span><i style="--score:52.2%"></i><b>52.2</b></div><div class="bar-row" role="listitem"><span>BigBang-v1</span><i style="--score:50.3%"></i><b>50.3</b></div><div class="bar-row" role="listitem"><span>DeepSeek-V4-Pro</span><i style="--score:48.2%"></i><b>48.2</b></div><div class="bar-row" role="listitem"><span>DeepSeek-V4-Flash</span><i style="--score:45.1%"></i><b>45.1</b></div></div>
-            <p class="benchmark-note">Text-only accuracy · * GPT-5.5 uses the full HLE set</p>
-          </article>
-
-          <article class="benchmark-card domain-research" aria-labelledby="gaia-title">
-            <div class="benchmark-head"><div><span class="benchmark-type">Deep research · Transfer</span><h3 id="gaia-title">GAIA</h3></div><strong>92.2</strong></div>
-            <div class="bars" role="list" aria-label="GAIA comparison"><div class="bar-row" role="listitem"><span>XYZ-Aquila-mini</span><i style="--score:97.1%"></i><b>97.1</b></div><div class="bar-row ours" role="listitem"><span>AREX-2</span><i style="--score:92.2%"></i><b>92.2</b></div><div class="bar-row" role="listitem"><span>GPT-5.5</span><i style="--score:87.4%"></i><b>87.4</b></div><div class="bar-row" role="listitem"><span>AREX (122B)</span><i style="--score:85.4%"></i><b>85.4</b></div><div class="bar-row" role="listitem"><span>AREX (4B)</span><i style="--score:81.6%"></i><b>81.6</b></div><div class="bar-row" role="listitem"><span>GLM-5.3-Flash</span><i style="--score:78.8%"></i><b>78.8</b></div><div class="bar-row" role="listitem"><span>DeepSeek-V4-Pro</span><i style="--score:71.1%"></i><b>71.1</b></div></div>
-            <p class="benchmark-note">Accuracy · higher is better</p>
-          </article>
-
-          <article class="benchmark-card domain-research" aria-labelledby="dsqa-title">
-            <div class="benchmark-head"><div><span class="benchmark-type">Deep research · Transfer</span><h3 id="dsqa-title">DeepSearchQA</h3></div><strong>93.8</strong></div>
-            <div class="bars" role="list" aria-label="DeepSearchQA comparison"><div class="bar-row" role="listitem"><span>Claude Fable 5</span><i style="--score:94.2%"></i><b>94.2</b></div><div class="bar-row ours" role="listitem"><span>AREX-2</span><i style="--score:93.8%"></i><b>93.8</b></div><div class="bar-row" role="listitem"><span>Iris-pro</span><i style="--score:92.9%"></i><b>92.9</b></div><div class="bar-row" role="listitem"><span>Kimi-K2.6</span><i style="--score:92.5%"></i><b>92.5</b></div><div class="bar-row" role="listitem"><span>DeepSeek-V4-Flash</span><i style="--score:90.6%"></i><b>90.6</b></div><div class="bar-row" role="listitem"><span>AREX (122B)</span><i style="--score:89.9%"></i><b>89.9</b></div><div class="bar-row" role="listitem"><span>DeepSeek-V4-Pro</span><i style="--score:88.7%"></i><b>88.7</b></div></div>
-            <p class="benchmark-note">F1 · higher is better</p>
-          </article>
-        </div>
-        <div class="results-foot"><span>Source: AREX-2 paper · benchmark comparison</span></div>
       </div>
     </section>
 
     <div class="demo-transition">
       <a class="demo-scroll-cue" href="#demo">
-        <span>Scroll down to see the demo</span>
+        <span class="eyebrow">From the paper to the process</span>
+        <span>Scroll down to explore the demo</span>
         <svg width="24" height="34" viewBox="0 0 24 34" fill="none" aria-hidden="true"><path d="M12 2v28M5 23l7 7 7-7" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
       </a>
     </div>
 
-    <section class="section demo-section" id="demo" aria-labelledby="demo-title">
-      <div class="demo-view" id="demo-view">
-      <div class="demo-heading-wrap">
-        <div class="section-index">05 / Interactive demo</div>
-        <div class="section-grid demo-heading"><h2 id="demo-title">Follow a solution<br>as it improves.</h2><div class="section-copy"><p>Unloading Boxes · Frontier-CS 164</p><p>Replay five hours of iteration. Explore the task, then inspect the code, edits, and feedback behind each score.</p></div></div>
-      </div>
-      <div class="demo-embed"><iframe id="run-demo" src="demo/index.html" title="AREX-2 Unloading Boxes: interactive task and recorded run" loading="lazy" allow="clipboard-write" height="760"></iframe></div>
+    <section class="demo-section" id="demo" aria-labelledby="demo-title">
+      <div class="demo-view" id="demo-view" tabindex="-1">
+        <div class="demo-toolbar">
+          <a href="#idea" class="demo-back"><span aria-hidden="true">←</span> Back to research</a>
+          <span>AREX-2 <span aria-hidden="true">/</span> Interactive demo</span>
+        </div>
+        <div class="demo-heading-wrap section-shell">
+          <header class="section-copy">
+            <div><p class="eyebrow">Interactive demo</p><h2 id="demo-title">Follow a solution<br>as it improves.</h2></div>
+            <p>Unloading Boxes · Frontier-CS 164. Replay five hours of iteration. Explore the task, then inspect the code, edits, and feedback behind each score.</p>
+          </header>
+        </div>
+        <div class="demo-embed"><iframe id="run-demo" src="demo/index.html" title="AREX-2 Unloading Boxes: interactive task and recorded run" loading="lazy" allow="clipboard-write" height="760"></iframe></div>
       </div>
     </section>
   </main>
 
   <footer class="site-footer">
-    <div class="page footer-inner"><span>AREX-2 · Long-horizon reflective agents</span><a href="#top">Back to top ↑</a></div>
+    <span>AREX-2</span>
+    <span>Beijing Academy of Artificial Intelligence</span>
+    <a href="#top">Back to top <span aria-hidden="true">↑</span></a>
   </footer>
-  <script src="app.js"></script>
 </body>
 </html>
