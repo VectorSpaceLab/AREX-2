@@ -12,7 +12,7 @@ AREX-2 studies whether an agent can turn more test-time rounds into a better sol
 
 This repository contains the evaluation runners and dataset definitions for the six reported tracks. It keeps benchmark files, model outputs, credentials, and run artifacts outside Git while making the evaluation command simple: choose a dataset, then record the model, endpoint, task range, evaluator mode, commit, and data checksum with every number.
 
-<!-- - 🌐 [Project site](https://vectorspacelab.github.io/AREX-2/) — Research overview and benchmark results. -->
+- 🌐 [Project site](https://vectorspacelab.github.io/AREX-2/) — Research overview and benchmark results.
 - 📚 [Evaluation guide](data/README.md) — Data preparation, prompts, and scoring for each dataset.
 - 🧪 [Experiment notes](scripts/README.md) — Run configurations and experiment notes.
 - 🇨🇳 [中文说明](README.zh-CN.md) — 中文安装与评测指南。
