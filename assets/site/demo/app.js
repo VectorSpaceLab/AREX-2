@@ -20,26 +20,12 @@
   const fileEvents = events.filter(event => event.kind !== 'submission');
   const byId = new Map(events.map(e => [e.id,e]));
   const capture = new URLSearchParams(location.search).has('capture');
-  const compressedIntervals = [[0,3600],[5400,10800]]
-    .map(([start,end]) => [Math.min(start,HORIZON),Math.min(end,HORIZON)])
-    .filter(([start,end]) => end > start);
-  const compressedDuration = compressedIntervals.reduce((total,[start,end]) => total + end - start,0);
-  // Trim the two plateaus leading up to 31.16 and 38.01 by a further quarter.
-  const improvements = DATA.submissions.filter(submission => submission.improvement);
-  const leadInStart = improvements[0].time, leadInEnd = improvements[2].time;
-  const leadInWeight = .75;
-  // Compress WRITE 017 through the 38.01 improvement to 20% of its current length.
-  const writeLeadInStart = DATA.writes.find(event => event.number === 17).time;
-  const writeLeadInWeight = .2;
-  const makeTimeScale = (normalWeight, {earlyWeight = 1, laterWeight = 1, writeWeight = 1} = {}) => {
-    const boundaries = [...new Set([0,...compressedIntervals.flat(),leadInStart,writeLeadInStart,leadInEnd,HORIZON])].sort((a,b) => a-b);
+  const makeTimeScale = () => {
+    const boundaries = [...new Set([0,3600,9000,12600,HORIZON])].sort((a,b) => a-b);
     let total = 0;
     const segments = boundaries.slice(1).map((end,index) => {
       const start = boundaries[index];
-      let weight = compressedIntervals.some(([a,b]) => start >= a && end <= b) ? .5 : normalWeight;
-      if (start >= leadInStart && end <= leadInEnd) weight *= earlyWeight;
-      else if (start >= leadInEnd) weight *= laterWeight;
-      if (start >= writeLeadInStart && end <= leadInEnd) weight *= writeWeight;
+      const weight = start < 3600 ? .5 : start < 9000 ? 1/3 : start < 12600 ? .25 : 1;
       const segment = {start,end,offset:total,weight};
       total += (end-start)*weight;
       return segment;
@@ -58,20 +44,8 @@
       },
     };
   };
-  // Keep the opening unchanged and give the space saved on the plateaus to later improvements.
-  const remainingDuration = HORIZON-compressedDuration;
-  const normalChartWeight = remainingDuration > 0 ? (HORIZON-compressedDuration*.5)/remainingDuration : 1;
-  const priorChartScale = makeTimeScale(normalChartWeight);
-  const savedWidth = (priorChartScale.forward(leadInEnd)-priorChartScale.forward(leadInStart))*(1-leadInWeight)
-    + (priorChartScale.forward(leadInEnd)-priorChartScale.forward(writeLeadInStart))*leadInWeight*(1-writeLeadInWeight);
-  const laterWidth = priorChartScale.length-priorChartScale.forward(leadInEnd);
-  const chartScale = makeTimeScale(normalChartWeight,{
-    earlyWeight: leadInWeight,
-    laterWeight: laterWidth > 0 ? 1+savedWidth/laterWidth : 1,
-    writeWeight: writeLeadInWeight,
-  });
-  // Apply the same extra compression to playback while retaining the pace elsewhere.
-  const playbackScale = makeTimeScale(1,{earlyWeight:leadInWeight,writeWeight:writeLeadInWeight});
+  const chartScale = makeTimeScale();
+  const playbackScale = chartScale;
   const START = CONFIG.timing.trajectoryStart;
   const END = START + (CONFIG.timing.trajectoryEnd-START)*playbackScale.length/HORIZON;
   const DURATION = END + CONFIG.timing.duration-CONFIG.timing.trajectoryEnd;
