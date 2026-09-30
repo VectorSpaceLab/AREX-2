@@ -12,7 +12,7 @@ AREX-2 研究智能体能否把更多测试时迭代转化为更好的解。论�
 
 本仓库包含论文中六个评测方向所需的评测器和数据集定义。benchmark 文件、模型输出、凭据和运行结果保留在 Git 之外；使用时只需选择数据集，并为每个结果记录模型、endpoint、任务范围、评测模式、commit 和数据 checksum。
 
-<!-- - 🌐 [项目主页](https://vectorspacelab.github.io/AREX-2/) — 研究概览和 benchmark 结果。 -->
+- 🌐 [项目主页](https://vectorspacelab.github.io/AREX-2/) — 研究概览和 benchmark 结果。
 - 📚 [评测指南](data/README.md) — 数据准备、prompt 和各数据集评分方式。
 - 🧪 [实验说明](scripts/README.md) — 运行配置和实验记录。
 - 🇬🇧 [English](README.md) — English installation and evaluation guide.
