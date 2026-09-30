@@ -14,7 +14,7 @@ import zipfile
 
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "evaluation"))
-from arex_v2.data import download, extract_tar, extract_zip  # noqa: E402
+from arex_eval.data import download, extract_tar, extract_zip  # noqa: E402
 
 
 def download_algorithmic(

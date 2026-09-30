@@ -1,17 +1,35 @@
-# Source tree
+# Evaluation internals
 
-`evaluation/arex_v2` is the maintained repository boundary. It resolves a dataset,
-checks its input, and delegates to one of the three backends.
+The public entrypoint is the root-level `evaluate.py`. It resolves a dataset,
+checks the prepared input, and dispatches to the matching evaluator. The
+directories below separate checkout glue, benchmark implementations, and
+third-party snapshots.
 
-The remaining directories are pinned evaluator snapshots or runtime adapters:
+```text
+evaluation/
+├── arex_eval/            root CLI, dataset catalog, profiles, and dispatch
+├── research/             unified research evaluator and HLE adapter
+├── frontier/
+│   ├── source/            Frontier-CS Python evaluator
+│   ├── judge/             local Docker/SkyPilot judge service
+│   └── profiles/          Harbor/Pi experiment profiles
+├── mle/                  MLE-bench Lite agent, harness, and host grader
+└── vendor/harbor/        pinned Harbor source used by Frontier experiments
+```
 
-- `research_eval/` — unified research evaluator and its HLE support code.
-- `frontier_cs/` — Frontier-CS Python evaluator.
-- `algorithmic/` — the local Docker/SkyPilot judge service.
-- `mle_lite/` — MLE-bench Lite runner and host grader.
-- `harbor_pi_supported/`, `frontier_configs/`, `frontier_run/` — upstream support
-  files used by the Frontier/Harbor experiments.
+Dataset contracts stay in `data/`: prompts, loaders, judge selection, and
+input preparation notes are kept next to each dataset. User-facing launchers
+stay in `scripts/`, while `evaluation/` contains the implementation they call.
 
-Dataset definitions are intentionally outside this tree in `data/`. This
-keeps prompt and judge changes reviewable without searching through a runner
-snapshot.
+The normal commands are deliberately short:
+
+```bash
+python3 evaluate.py BrowseComp --n 10
+python3 evaluate.py algorithmic 1 path/to/solution.cpp --backend docker
+python3 evaluate.py mle leaf-classification
+```
+
+Use [data/README.md](../data/README.md) for dataset-specific contracts and
+[the evaluation guide](../docs/evaluation/evaluation.md) for result recording.
+Pinned upstream versions and licenses are listed in the repository-level
+`SNAPSHOT.txt` and `THIRD_PARTY_NOTICES.md`.

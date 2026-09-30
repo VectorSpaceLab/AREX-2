@@ -20,10 +20,10 @@ This repository contains the evaluation runners and dataset definitions for the 
 ## Layout
 
 ```text
-evaluation/   CLI, evaluation adapters, and the pinned evaluator snapshots
+evaluation/   CLI, benchmark implementations, judge services, and vendor snapshots
 data/         dataset configs, preparation catalog, and per-dataset notes
 assets/       benchmark PDF/SVG, logo files, and the static project site
-docs/         AREX-2 paper PDF
+docs/         paper PDF and detailed evaluation notes
 scripts/      download scripts, run configs, and algorithmic experiments
 evaluate.py   short root-level wrapper for selecting research datasets
 ```
@@ -93,7 +93,7 @@ python3 evaluate.py BrowseComp --n 10 \
   --save-path runs/browsecomp-10
 ```
 
-See [the shared parameter table](evaluation/docs/configuration.md#shared-research-profile)
+See [the shared parameter table](docs/evaluation/configuration.md#shared-research-profile)
 for the exact values. `--profile default` opts out of this profile;
 `--dry-run` shows the expanded command without calling a service.
 
@@ -109,11 +109,11 @@ python3 evaluate.py download --list
 
 By default files are stored under `data/files/`. Use `--data-root PATH` to keep them elsewhere, or `--data-path PATH` for one manually prepared dataset. The selected path is checked before a real run starts. Results are written to `runs/<timestamp>/<dataset>/`; inspect each case's `status`, `judge_raw`, and `score_result` before aggregating scores.
 
-The per-dataset input format, prompt, judge, metric, and preparation command are documented in [data/README.md](data/README.md). Advanced CLI and environment options are in [evaluation/docs/configuration.md](evaluation/docs/configuration.md).
+The per-dataset input format, prompt, judge, metric, and preparation command are documented in [data/README.md](data/README.md). Advanced CLI and environment options are in [docs/evaluation/configuration.md](docs/evaluation/configuration.md).
 
 ## Frontier-CS algorithmic evaluation
 
-The source for the judge is in `evaluation/algorithmic/`; the downloaded problem set and run artifacts live in `data/algorithmic/`:
+The source for the judge is in `evaluation/frontier/judge/`; the downloaded problem set and run artifacts live in `data/algorithmic/`:
 
 ```bash
 python3 evaluate.py download algorithmic
@@ -128,10 +128,10 @@ Solutions are C++17 files. The checker reports per-case results and `scoreRatio`
 MLE_BENCH=$HOME/mle-bench python3 evaluate.py mle leaf-classification --prepare
 MLE_BENCH=$HOME/mle-bench python3 evaluate.py mle leaf-classification
 MLE_BENCH=$HOME/mle-bench \
-  bash evaluation/mle_lite/scripts/grade.sh runs/<run-dir> leaf-classification
+  bash scripts/mle/grade.sh runs/<run-dir> leaf-classification
 ```
 
-The final number comes from the host grader (`grade.log`), including `valid_submission` and the competition score. The runner and its upstream notes are kept in `evaluation/mle_lite/`.
+The final number comes from the host grader (`grade.log`), including `valid_submission` and the competition score. The harness and its upstream notes are kept in `evaluation/mle/`; the checkout-level lifecycle wrappers are in `scripts/mle/`.
 
 ## Results
 

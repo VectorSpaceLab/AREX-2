@@ -1,7 +1,7 @@
 # Frontier-CS algorithmic track
 
 This is the data contract for the algorithmic benchmark. The judge service code
-lives in `evaluation/algorithmic/`; the downloaded problems and run artifacts stay in
+lives in `evaluation/frontier/judge/`; the downloaded problems and run artifacts stay in
 this directory so they are easy to inspect and can remain ignored by Git.
 
 ## Evaluation protocol
@@ -41,7 +41,7 @@ python3 evaluate.py algorithmic 1 path/to/solution.cpp --backend docker
 ```
 
 The same command can use a running remote judge with `--judge-url`, or launch
-the SkyPilot configuration at `evaluation/algorithmic/sky-judge.yaml` with
+the SkyPilot configuration at `evaluation/frontier/judge/sky-judge.yaml` with
 `--backend skypilot`. The preparation script accepts a pinned archive URL and
 checksum:
 

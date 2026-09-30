@@ -37,7 +37,7 @@ from openai import OpenAI, APITimeoutError
 script_dir = Path(__file__).parent
 algo_dir = script_dir.parent
 repo_root = algo_dir.parent
-sys.path.insert(0, str(repo_root / "src"))
+sys.path.insert(0, str(repo_root / "evaluation" / "frontier" / "source"))
 
 from frontier_cs.gen import ensure_env_loaded
 
@@ -368,7 +368,7 @@ def main():
     
     if not judge.is_available():
         print(f"{red('ERROR:')} Judge server not available at {args.judge_url}")
-        print("Start the judge with: cd evaluation/algorithmic && docker compose up -d")
+        print("Start the judge with: cd evaluation/frontier/judge && docker compose up -d")
         sys.exit(1)
     
     # Get problem list

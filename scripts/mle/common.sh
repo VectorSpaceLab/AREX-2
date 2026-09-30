@@ -10,7 +10,7 @@ fi
 
 MLE_SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 AREX_REPO_ROOT="$(cd "$MLE_SCRIPT_DIR/../.." && pwd)"
-MLE_LITE_ROOT="$AREX_REPO_ROOT/evaluation/mle_lite"
+MLE_LITE_ROOT="$AREX_REPO_ROOT/evaluation/mle"
 MLE_LITE_SCRIPTS="$MLE_LITE_ROOT/scripts"
 
 export DATA_DIR="${DATA_DIR:-$HOME/.cache/mle-bench/data}"

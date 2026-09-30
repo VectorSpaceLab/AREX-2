@@ -34,6 +34,6 @@ python3 evaluate.py download GAIA-2023-validation-text-103
 ## Other tracks
 
 - [Frontier-CS algorithmic](algorithmic/README.md): C++17 submissions are sent to the checker for every test case. The result is the checker score (`scoreRatio`, with the unbounded value retained).
-- MLE-bench Lite: `python3 evaluate.py mle COMPETITION`; the host grader in `evaluation/mle_lite/scripts/grade.sh` supplies the final competition score.
+- MLE-bench Lite: `python3 evaluate.py mle COMPETITION`; the host grader in `scripts/mle/grade.sh` supplies the final competition score.
 
-The evaluator implementation is in `evaluation/research_eval/`; it is kept separate from these dataset contracts so changing a runner does not hide how a benchmark is scored.
+The research evaluator implementation is in `evaluation/research/`; it is kept separate from these dataset contracts so changing a runner does not hide how a benchmark is scored.

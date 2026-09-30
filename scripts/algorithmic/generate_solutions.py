@@ -25,6 +25,12 @@ from datetime import datetime
 
 import requests
 
+# Make the checked-in Frontier-CS source importable when this experiment is
+# launched directly from the checkout.
+script_dir = Path(__file__).resolve().parent
+repo_root = script_dir.parents[1]
+sys.path.insert(0, str(repo_root / "evaluation" / "frontier" / "source"))
+
 from frontier_cs.models import get_model_prefix, is_reasoning_model
 from frontier_cs.gen import (
     build_key_pools, get_fallback_api_key, APIKeyPool,
@@ -308,7 +314,7 @@ def main():
 
     if not judge.is_available():
         print(f"{red('ERROR:')} Judge server not available at {args.judge_url}")
-        print("Start the judge with: cd evaluation/algorithmic && docker compose up -d")
+        print("Start the judge with: cd evaluation/frontier/judge && docker compose up -d")
         sys.exit(1)
 
     # Get problem list (positional args take precedence, default: all from judge)

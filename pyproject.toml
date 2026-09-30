@@ -19,11 +19,11 @@ frontier = ["pyyaml", "requests", "openai", "anthropic", "datasets", "tqdm"]
 all = ["openai", "httpx", "requests", "pandas", "pyarrow", "huggingface_hub", "pillow", "pypdf", "rich", "transformers", "pyyaml", "anthropic", "datasets", "tqdm"]
 
 [project.scripts]
-arex = "arex_v2.cli:main"
+arex = "arex_eval.cli:main"
 
 [tool.setuptools]
 package-dir = {"" = "evaluation"}
 
 [tool.setuptools.packages.find]
 where = ["evaluation"]
-include = ["arex_v2*"]
+include = ["arex_eval*"]

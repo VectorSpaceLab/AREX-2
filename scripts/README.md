@@ -6,7 +6,7 @@ This directory holds commands that prepare data and run auxiliary experiments. T
 configs/       safe local environment template
 doctor.py      repository diagnostics
 download_*.py  data preparation entrypoints
-algorithmic/   Frontier-CS evaluation and solution-generation scripts
+algorithmic/   Frontier-CS evaluation, solution-generation, and Pi runners
 research/      one runner per research benchmark
 mle/           MLE-bench Lite prepare, run, grade, and summary wrappers
 ```
@@ -32,5 +32,5 @@ command-line arguments or result files.
 Compile the maintained Python entrypoints from the root:
 
 ```bash
-python3 -m compileall -q evaluation/arex_v2 evaluation/research_eval/unified_eval scripts
+python3 -m compileall -q evaluation/arex_eval evaluation/research/unified_eval scripts
 ```

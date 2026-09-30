@@ -20,10 +20,10 @@ AREX-2 研究智能体能否把更多测试时迭代转化为更好的解。论�
 ## 目录
 
 ```text
-evaluation/   CLI、评测适配器和固定版本的评测器
+evaluation/   CLI、各 benchmark 实现、judge 服务和第三方快照
 data/         数据集配置、准备清单和逐数据集说明
 assets/       benchmark PDF/SVG、logo 和项目主页
-docs/         AREX-2 论文 PDF
+docs/         论文 PDF 和详细评测说明
 scripts/      下载脚本、运行配置和算法题实验
 evaluate.py   选择 research 数据集的根目录快捷入口
 ```
@@ -77,7 +77,7 @@ python3 evaluate.py BrowseComp --n 10 \
   --save-path runs/browsecomp-10
 ```
 
-完整参数见[配置说明](evaluation/docs/configuration.zh-CN.md#四个核心数据集的默认参数)。
+完整参数见[配置说明](docs/evaluation/configuration.zh-CN.md#四个核心数据集的默认参数)。
 `--profile default` 可以关闭这组 profile；`--dry-run` 会打印展开后的完整命令，不会调用服务。
 
 有下载配方的数据集：
@@ -92,7 +92,7 @@ python3 evaluate.py download --list
 
 ## Frontier-CS 算法题
 
-评测器源码在 `evaluation/algorithmic/`，题目和运行结果在 `data/algorithmic/`：
+评测器源码在 `evaluation/frontier/judge/`，题目和运行结果在 `data/algorithmic/`：
 
 ```bash
 python3 evaluate.py download algorithmic
@@ -107,7 +107,7 @@ python3 evaluate.py algorithmic 1 path/to/solution.cpp --backend docker
 MLE_BENCH=$HOME/mle-bench python3 evaluate.py mle leaf-classification --prepare
 MLE_BENCH=$HOME/mle-bench python3 evaluate.py mle leaf-classification
 MLE_BENCH=$HOME/mle-bench \
-  bash evaluation/mle_lite/scripts/grade.sh runs/<run-dir> leaf-classification
+  bash scripts/mle/grade.sh runs/<run-dir> leaf-classification
 ```
 
 最终分数以 host grader 的 `grade.log` 为准。

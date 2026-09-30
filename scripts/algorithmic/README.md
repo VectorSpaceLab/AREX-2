@@ -23,3 +23,9 @@ FRONTIER_BACKEND=skypilot scripts/algorithmic/run.sh 1 path/to/solution.cpp
 The final result keeps the checker fields `scoreRatio` and
 `scoreRatioUnbounded`; a compile failure, timeout, or failed required case is
 not converted into a research-style pass rate.
+
+For the separate multi-problem Harbor/Pi experiment runner, use
+`scripts/algorithmic/pi_concurrent.sh` with one of the profiles under
+`evaluation/frontier/profiles/`. It requires the external Harbor command and
+machine-specific credentials, so it is not part of the short public command
+above.

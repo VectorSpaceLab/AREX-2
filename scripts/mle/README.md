@@ -2,7 +2,7 @@
 
 These wrappers keep MLE-bench's four lifecycle steps visible at the checkout
 level while delegating the actual harness and grader to
-`evaluation/mle_lite/scripts/`:
+`evaluation/mle/scripts/`:
 
 | Script | Purpose |
 | --- | --- |

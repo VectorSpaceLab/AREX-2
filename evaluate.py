@@ -13,7 +13,7 @@ Other operations use the explicit subcommand form::
     python3 evaluate.py algorithmic 1 path/to/solution.cpp --backend docker
     python3 evaluate.py mle leaf-classification
 
-The implementation lives in ``evaluation/arex_v2``; this file keeps the
+The implementation lives in ``evaluation/arex_eval``; this file keeps the
 checkout-level command independent of Python package installation details.
 """
 
@@ -23,7 +23,7 @@ import sys
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent / "evaluation"))
-from arex_v2.cli import main
+from arex_eval.cli import main
 
 
 _COMMANDS = frozenset({
