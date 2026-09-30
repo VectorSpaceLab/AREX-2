@@ -2,6 +2,7 @@
   'use strict';
   const DATA = JSON.parse(document.getElementById('replay-data').textContent);
   const CONFIG = JSON.parse(document.getElementById('replay-config').textContent);
+  const RECORDING = JSON.parse(document.getElementById('recording-config').textContent);
   const BASE_PLAYBACK_RATE = 2;
   const HORIZON = DATA.chartDuration || DATA.duration;
   const $ = id => document.getElementById(id);
@@ -50,10 +51,12 @@
   const END = START + (CONFIG.timing.trajectoryEnd-START)*playbackScale.length/HORIZON;
   const DURATION = END + CONFIG.timing.duration-CONFIG.timing.trajectoryEnd;
   const stageTimes = {statement:0, approach:CONFIG.timing.methodStart, trajectory:START};
-  const state = {time:START, actual:0, mode:'playback', playing:false, speed:1,
-    stage:'trajectory', selected:null, sourceTab:'code', inspectorPanel:'code', eventFilter:'all', query:'', lastInspectorKey:'', external:false};
+  const state = {time:capture ? 0 : START, actual:0, mode:'playback', playing:false, speed:1, view:'replay',
+    stage:capture ? 'statement' : 'trajectory', selected:null, sourceTab:'code', inspectorPanel:'code', eventFilter:'all', query:'', lastInspectorKey:'', external:false};
+  const demoVideo = $('demoVideo');
   let raf = 0, lastFrame = 0, toastTimer = 0, positions = new Map();
   let embeddedPlaybackRequested = false;
+  let reportedView = null;
   if (capture) document.body.classList.add('capture');
   const stageAt = time => time < CONFIG.timing.methodStart ? 'statement' : time < START ? 'approach' : 'trajectory';
   const actualAt = time => playbackScale.inverse(clamp((time - START) / (END - START), 0, 1) * playbackScale.length);
@@ -78,12 +81,12 @@
       stack.forEach((box, level) => {
         const y = 210 - (level+1)*31;
         const target = box === 1, moved = box === 4 || box === 7;
-        diagram += `<g><rect x="${x}" y="${y}" width="66" height="28" rx="4" fill="${target ? '#c7432b' : moved ? '#f3e4d3' : '#f4f6f8'}" stroke="${target ? '#c7432b' : moved ? '#c69a70' : '#9ca3af'}"/><path d="M${x+33} ${y+1}v7" stroke="${target ? '#9ca3af' : moved ? '#c69a70' : '#9ca3af'}"/><text x="${x+33}" y="${y+20}" text-anchor="middle" font-size="16" font-weight="500" fill="${target ? '#ffffff' : moved ? '#92633f' : '#6b7280'}">${box}</text></g>`;
+        diagram += `<g><rect x="${x}" y="${y}" width="66" height="28" rx="4" fill="${target ? 'var(--accent)' : moved ? 'var(--accent-soft)' : '#f4f6f8'}" stroke="${target ? 'var(--accent)' : moved ? 'var(--accent-line)' : '#9ca3af'}"/><path d="M${x+33} ${y+1}v7" stroke="${target ? '#9ca3af' : moved ? 'var(--accent-line)' : '#9ca3af'}"/><text x="${x+33}" y="${y+20}" text-anchor="middle" font-size="16" font-weight="500" fill="${target ? '#ffffff' : moved ? 'var(--accent)' : '#6b7280'}">${box}</text></g>`;
       });
     });
-    if (step === 0) diagram += '<path d="M82 106C99 54 163 27 202 42" fill="none" stroke="#9ca3af" stroke-width="1.8" stroke-dasharray="4 4" marker-end="url(#boxArrow)"/><text x="97" y="22" fill="#92633f" font-size="11">2 boxes · +3 energy</text>';
-    if (step === 1) diagram += '<path d="M76 168V99" stroke="#c7432b" stroke-width="1.5" stroke-dasharray="4 4"/><text x="76" y="82" text-anchor="middle" fill="#c7432b" font-size="12">1 is ready</text>';
-    if (step === 2) diagram += '<rect x="43" y="179" width="66" height="28" rx="4" fill="none" stroke="#9ca3af" stroke-dasharray="4 4"/><text x="76" y="133" text-anchor="middle" fill="#c7432b" font-size="13">1 → out</text><text x="76" y="154" text-anchor="middle" fill="#6b7280" font-size="11">+0 energy</text>';
+    if (step === 0) diagram += '<path d="M82 106C99 54 163 27 202 42" fill="none" stroke="#9ca3af" stroke-width="1.8" stroke-dasharray="4 4" marker-end="url(#boxArrow)"/><text x="97" y="22" fill="var(--accent)" font-size="11">2 boxes · +3 energy</text>';
+    if (step === 1) diagram += '<path d="M76 168V99" stroke="var(--accent)" stroke-width="1.5" stroke-dasharray="4 4"/><text x="76" y="82" text-anchor="middle" fill="var(--accent)" font-size="12">1 is ready</text>';
+    if (step === 2) diagram += '<rect x="43" y="179" width="66" height="28" rx="4" fill="none" stroke="#9ca3af" stroke-dasharray="4 4"/><text x="76" y="133" text-anchor="middle" fill="var(--accent)" font-size="13">1 → out</text><text x="76" y="154" text-anchor="middle" fill="#6b7280" font-size="11">+0 energy</text>';
     $('boxDiagram').innerHTML = diagram;
     const titles = ['Box 1 is blocked.', 'Box 1 is now on top.', 'First box carried out.'];
     const captions = ['Move boxes 4 and 7 together to stack 2, keeping their order.', 'Moving 2 boxes costs 2 + 1 = 3 energy. Now remove box 1.', 'Removing box 1 costs nothing. Next, expose and carry out box 2.'];
@@ -189,7 +192,7 @@
     const f = n => Number(n.toFixed(2));
     const labelBoxes = [];
     positions = new Map();
-    let html = `<defs><linearGradient id="scoreArea" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#6b7280" stop-opacity=".16"/><stop offset="100%" stop-color="#6b7280" stop-opacity=".015"/></linearGradient></defs>`;
+    let html = `<defs><linearGradient id="scoreArea" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="var(--accent)" stop-opacity=".16"/><stop offset="100%" stop-color="var(--accent)" stop-opacity=".015"/></linearGradient></defs>`;
     if(boundary !== null) {
       const phaseLabelX = mobile ? width-margin.right : boundary+14;
       html += `<text x="${margin.left}" y="13" fill="#6b7280" font-size="8" letter-spacing="1.5">EXPLORATION</text><text x="${phaseLabelX}" y="13" text-anchor="${mobile ? 'end' : 'start'}" fill="#6b7280" font-size="8" letter-spacing="1.5">EXPLOITATION</text>`;
@@ -207,7 +210,7 @@
     }
     const mainEnd = Math.min(shownTime, DATA.duration);
     line += `H${f(x(mainEnd))}`;
-    html += `<path d="${line}L${f(x(mainEnd))} ${bottom}H${f(x(0))}Z" fill="url(#scoreArea)" pointer-events="none"/><path id="mainScoreLine" d="${line}" stroke="#c7432b" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" fill="none" pointer-events="none"/>`;
+    html += `<path d="${line}L${f(x(mainEnd))} ${bottom}H${f(x(0))}Z" fill="url(#scoreArea)" pointer-events="none"/><path id="mainScoreLine" d="${line}" stroke="var(--accent)" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" fill="none" pointer-events="none"/>`;
     const baseline = DATA.baseline.points.filter(point => point.time <= shownTime + 0.001);
     let baselineValue = 0, baselinePath = `M${f(x(0))} ${f(y(0))}`;
     for (const point of baseline) {
@@ -223,8 +226,8 @@
       const px = x(sub.time), py = y(sub.score), isSelected = selected?.id === sub.id;
       positions.set(sub.id,{x:px,y:py});
       const radius = isSelected ? 6 : sub.improvement ? 4.8 : 3.7;
-      const fill = sub.improvement ? '#c7432b' : '#ffffff';
-      const stroke = sub.improvement ? '#c7432b' : '#6b7280';
+      const fill = sub.improvement ? 'var(--accent)' : '#ffffff';
+      const stroke = sub.improvement ? 'var(--accent)' : '#6b7280';
       const label = `Submission ${sub.number}, ${sub.filename}, score ${formatScore(sub.score)}, at ${formatTime(sub.time)}. ${sub.algorithm.title}.`;
       html += `<g class="plot-point" data-event="${sub.id}" tabindex="0" role="button" aria-label="${escapeHTML(label)}"><circle class="hit-ring" cx="${px}" cy="${py}" r="10" fill="transparent" stroke="${isSelected ? '#9ca3af' : 'transparent'}"/><circle cx="${px}" cy="${py}" r="${radius}" fill="${fill}" stroke="${stroke}" stroke-width="1.4"/><title>${escapeHTML(label)}</title></g>`;
       if (sub.improvement) {
@@ -296,12 +299,28 @@
     $('elapsedLabel').textContent = isExplore ? 'Click a point to inspect code or patch' : state.stage === 'trajectory' ? `Run time ${formatTime(state.actual)} · condensed replay` : `${Math.round(DURATION / BASE_PLAYBACK_RATE)}-second condensed replay`;
   }
   function render() {
+    const videoVisible = state.view === 'video';
     for (const stage of ['statement','approach','trajectory']) {
-      $(stage+'Scene').hidden = state.stage !== stage;
+      const active = !videoVisible && state.stage === stage;
+      $(stage+'Scene').hidden = !active;
       const nav = document.querySelector(`[data-stage="${stage}"]`);
-      nav.classList.toggle('active',state.stage === stage);
-      if (state.stage === stage) nav.setAttribute('aria-current','step'); else nav.removeAttribute('aria-current');
+      nav.classList.toggle('active',active);
+      if (active) nav.setAttribute('aria-current','step'); else nav.removeAttribute('aria-current');
     }
+    $('videoScene').hidden = !videoVisible;
+    $('interactiveNav').hidden = videoVisible;
+    for (const [id,active] of [['interactiveTab',!videoVisible],['videoTab',videoVisible]]) {
+      $(id).classList.toggle('active',active);
+      if (active) $(id).setAttribute('aria-current','page'); else $(id).removeAttribute('aria-current');
+    }
+    document.querySelector('.narrative-line').hidden = videoVisible;
+    document.querySelector('.playback-bar').hidden = videoVisible;
+    document.querySelector('.app').classList.toggle('is-video-view',videoVisible);
+    if (reportedView !== state.view) {
+      reportedView = state.view;
+      parent.postMessage({type:'arex-demo:view',view:state.view},location.origin === 'null' ? '*' : location.origin);
+    }
+    if (videoVisible) return;
     const best = bestAt(state.actual);
     $('bestScore').textContent = formatScore(best);
     const baseline = baselineAt(state.actual);
@@ -311,6 +330,10 @@
     renderNarrative(); renderControls(); renderChart(); renderInspector();
   }
   function setTime(seconds, manual = false) {
+    if (state.view === 'video') {
+      demoVideo.pause();
+      state.view = 'replay';
+    }
     state.time = clamp(seconds,0,DURATION);
     state.actual = actualAt(state.time);
     state.stage = stageAt(state.time);
@@ -336,7 +359,7 @@
     if (state.time >= DURATION) stopPlayback(); else raf=requestAnimationFrame(tick);
   }
   function play() {
-    if (capture) return;
+    if (capture || state.view === 'video') return;
     if (state.playing) {stopPlayback();return;}
     state.external = false;
     if (state.mode === 'explore') {state.mode='playback';state.time=replayAt(state.actual);}
@@ -451,6 +474,23 @@
 
   $('playButton').addEventListener('click',play);
   $('restartButton').addEventListener('click',()=>{stopPlayback();state.mode='playback';setTime(START,true);updateFocusButton();});
+  $('interactiveTab').addEventListener('click',()=>{
+    if (state.view === 'replay') return;
+    demoVideo.pause();
+    state.view='replay';
+    render();
+  });
+  $('videoTab').addEventListener('click',()=>{
+    stopPlayback();
+    state.view='video';
+    if (!demoVideo.getAttribute('src')) {
+      demoVideo.poster=demoVideo.dataset.poster;
+      demoVideo.preload='metadata';
+      demoVideo.src=demoVideo.dataset.src;
+      demoVideo.load();
+    }
+    render();
+  });
   $('playbackMode').addEventListener('click',()=>setMode('playback'));
   $('exploreMode').addEventListener('click',()=>setMode('explore'));
   $('speedSelect').addEventListener('change',event=>{state.speed=Number(event.target.value);});
@@ -514,7 +554,7 @@
   $('closeDialog').addEventListener('click',()=>$('detailDialog').close());
   $('detailDialog').addEventListener('click',event=>{if(event.target===$('detailDialog')){const r=event.target.getBoundingClientRect();if(event.clientX<r.left||event.clientX>r.right||event.clientY<r.top||event.clientY>r.bottom)event.target.close();}});
   document.addEventListener('keydown',event=>{
-    if($('detailDialog').open || /INPUT|SELECT|TEXTAREA|BUTTON/.test(event.target.tagName) || event.ctrlKey || event.metaKey || event.altKey)return;
+    if(state.view==='video' || $('detailDialog').open || /INPUT|SELECT|TEXTAREA|BUTTON/.test(event.target.tagName) || event.ctrlKey || event.metaKey || event.altKey)return;
     if(event.code==='Space'){event.preventDefault();play();}
     if(event.key==='ArrowLeft'||event.key==='ArrowRight'){
       event.preventDefault();const delta=event.key==='ArrowRight'?1:-1;
@@ -522,10 +562,16 @@
     }
   });
   const resize=new ResizeObserver(()=>requestAnimationFrame(renderChart));resize.observe($('chartContainer'));
-  window.demoMeta={...CONFIG.capture,duration:DURATION,previewTimes:[0,(CONFIG.timing.methodStart+START)/2,START+(END-START)*.22,START+(END-START)*.64,DURATION-1],mode:'recorded reconstruction',audio:false};
-  window.setDemoTime=seconds=>{stopPlayback();clearTimeout(toastTimer);$('toast').hidden=true;state.external=true;state.mode='playback';state.selected=null;state.sourceTab='code';state.inspectorPanel='code';$('eventBrowser').hidden=true;$('chartTooltip').hidden=true;if($('detailDialog').open)$('detailDialog').close();setTime(Number(seconds)||0,true);if(state.time>=CONFIG.timing.methodStart)focusWorkspace();else updateFocusButton();};
+  const recordingTime = seconds => {
+    const time = clamp(seconds,0,RECORDING.duration);
+    if (time <= START) return time;
+    if (time < RECORDING.trajectoryEnd) return START + (time-START)/(RECORDING.trajectoryEnd-START)*(END-START);
+    return END + (time-RECORDING.trajectoryEnd)/(RECORDING.duration-RECORDING.trajectoryEnd)*(DURATION-END);
+  };
+  window.demoMeta={...CONFIG.capture,duration:capture ? RECORDING.duration : DURATION,previewTimes:capture ? RECORDING.previewTimes : [0,(CONFIG.timing.methodStart+START)/2,START+(END-START)*.22,START+(END-START)*.64,DURATION-1],mode:'recorded reconstruction',audio:false};
+  window.setDemoTime=seconds=>{stopPlayback();clearTimeout(toastTimer);$('toast').hidden=true;state.external=true;state.mode='playback';state.selected=null;state.sourceTab='code';state.inspectorPanel='code';$('eventBrowser').hidden=true;$('chartTooltip').hidden=true;if($('detailDialog').open)$('detailDialog').close();const time=Number(seconds)||0;setTime(capture ? recordingTime(time) : time,true);if(state.time>=CONFIG.timing.methodStart)focusWorkspace();else updateFocusButton();};
   // Read-only state is useful for verification and deterministic embedding.
-  window.replayState=()=>({time:state.time,actualTime:state.actual,mode:state.mode,stage:state.stage,playing:state.playing,speed:state.speed,selected:activeEvent()?.id||null,bestScore:bestAt(state.actual),inspectorPanel:state.inspectorPanel});
+  window.replayState=()=>({time:state.time,actualTime:state.actual,mode:state.mode,stage:state.stage,view:state.view,playing:state.playing,speed:state.speed,selected:activeEvent()?.id||null,bestScore:bestAt(state.actual),inspectorPanel:state.inspectorPanel});
   const imagesReady=Promise.all([...document.images].map(img=>img.decode()));
   window.demoReady=Promise.all([document.fonts.ready,imagesReady]).then(()=>{render();updateFocusButton();return true;});
   let reportedHeight = 0;
@@ -539,18 +585,18 @@
   new ResizeObserver(reportSize).observe(document.querySelector('.app'));
   window.addEventListener('message', event => {
     if (event.source !== parent || event.origin !== location.origin) return;
-    if (event.data?.type === 'arex-demo:pause') stopPlayback();
+    if (event.data?.type === 'arex-demo:pause') {stopPlayback();demoVideo.pause();}
     if (event.data?.type === 'arex-demo:play') {
       embeddedPlaybackRequested = true;
       window.demoReady.then(() => {
-        if (embeddedPlaybackRequested && !state.playing && !document.hidden && !$('detailDialog').open) play();
+        if (embeddedPlaybackRequested && state.view==='replay' && !state.playing && !document.hidden && !$('detailDialog').open) play();
       });
     }
     if (event.data?.type === 'arex-demo:viewport' && Number.isFinite(event.data.height)) {
       document.documentElement.style.setProperty('--embedded-height', `${Math.max(580, event.data.height)}px`);
     }
   });
-  document.addEventListener('visibilitychange', () => { if (document.hidden) stopPlayback(); });
+  document.addEventListener('visibilitychange', () => { if (document.hidden) {stopPlayback();demoVideo.pause();} });
   window.demoReady.then(reportSize);
   render();
 })();
