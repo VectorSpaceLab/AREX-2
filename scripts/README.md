@@ -6,8 +6,17 @@ This directory holds commands that prepare data and run auxiliary experiments. T
 configs/       safe local environment template
 doctor.py      repository diagnostics
 download_*.py  data preparation entrypoints
-algorithmic/   Frontier-CS solution-generation experiments
+algorithmic/   Frontier-CS evaluation and solution-generation scripts
+research/      one runner per research benchmark
+mle/           MLE-bench Lite prepare, run, grade, and summary wrappers
 ```
+
+The four headline research datasets have dedicated wrappers in
+`research/`. Each wrapper selects one dataset and the shared `refine-equal`
+profile, so the command exposes the benchmark choice while keeping the
+evaluation settings in one maintained place. See
+[`research/README.md`](research/README.md) for the fixed settings and the
+model, endpoint, judge, task-range, and output variables.
 
 The normal research path is still short:
 
