@@ -60,17 +60,60 @@
           <p class="hero-note">Learning to improve, round after round. Long-horizon reflection learned in coding tasks carries over to deep research.</p>
         </header>
 
-        <figure class="results-figure" id="results">
-          <div class="figure-viewport results-viewport" tabindex="0" role="region" aria-label="Scrollable benchmark results figure">
-            <!-- Source: assets/performance/arex-v2-benchmark-results.svg. -->
-            <img src="media/arex-v2-benchmark-results.svg" width="720" height="340"
-              alt="AREX-2 (27B) benchmark results: BrowseComp 84.0, text-only HLE 52.6, Frontier-CS 70.7, DeepSearchQA 93.8, GAIA 92.2, and MLE-bench Lite 81.8, compared with selected open- and closed-weight models."
-              fetchpriority="high" loading="eager">
+        <figure class="results-figure" id="results" role="region" aria-roledescription="carousel" aria-label="AREX-2 results">
+          <div class="figure-viewport results-viewport" tabindex="0" role="region" aria-label="Scrollable results figures">
+            <div class="results-stage">
+              <div class="results-slide is-active" id="results-benchmarks" data-result-slide role="group" aria-roledescription="slide" aria-label="1 of 3: Benchmark results">
+                <!-- Source: assets/performance/arex-v2-benchmark-results.svg. -->
+                <img src="media/arex-v2-benchmark-results.svg" width="720" height="340"
+                  alt="AREX-2 (27B) benchmark results: BrowseComp 84.0, text-only HLE 52.6, Frontier-CS 70.7, DeepSearchQA 93.8, GAIA 92.2, and MLE-bench Lite 81.8, compared with selected open- and closed-weight models."
+                  fetchpriority="high" loading="eager">
+              </div>
+              <div class="results-slide results-pair" id="results-coding" data-result-slide role="group" aria-roledescription="slide" aria-label="2 of 3: Parameter Efficiency · Coding" aria-hidden="true" inert>
+                <!-- Source: Research_Gym_0930/img/size_perf_final.pdf, bottom-left and bottom-right panels cropped as vectors. -->
+                <img src="media/arex-2-mle-lite.svg" width="673" height="577"
+                  alt="MLE performance across model sizes. AREX-2 (27B) scores 81.8, compared with other open- and closed-weight models."
+                  fetchpriority="low" loading="eager" decoding="async">
+                <img src="media/arex-2-frontier-cs.svg" width="673" height="577"
+                  alt="Frontier-CS performance across model sizes. AREX-2 (27B) scores 70.7, compared with other open- and closed-weight models."
+                  fetchpriority="low" loading="eager" decoding="async">
+              </div>
+              <div class="results-slide results-pair" id="results-deep-research" data-result-slide role="group" aria-roledescription="slide" aria-label="3 of 3: Parameter Efficiency · Deep Research" aria-hidden="true" inert>
+                <!-- Source: Research_Gym_0930/img/size_perf_final.pdf, top-left and top-right panels cropped as vectors. -->
+                <img src="media/arex-2-browsecomp.svg" width="673" height="577"
+                  alt="BrowseComp performance across model sizes. AREX-2 (27B) scores 84.0, compared with other open- and closed-weight models."
+                  fetchpriority="low" loading="eager" decoding="async">
+                <img src="media/arex-2-deepsearchqa.svg" width="673" height="577"
+                  alt="DeepSearchQA performance across model sizes. AREX-2 (27B) scores 93.8, compared with other open- and closed-weight models."
+                  fetchpriority="low" loading="eager" decoding="async">
+              </div>
+            </div>
           </div>
-          <figcaption>
-            <span>Six evaluations of coding, deep research, and agentic reasoning.</span>
-            <span class="figure-meta">AREX-2 · 27B</span>
-            <span class="figure-note">MLE-Lite: Any Medal, averaged over three seeds, with skills. DeepSearchQA: F1. HLE: text-only, except GPT-5.5 (full set).</span>
+          <div class="results-controls" role="group" aria-label="Choose a results figure" hidden>
+            <button class="results-selector" type="button" data-result-index="0" aria-controls="results-benchmarks" aria-pressed="true">Benchmarks</button>
+            <button class="results-selector" type="button" data-result-index="1" aria-controls="results-coding" aria-pressed="false"><span><strong>Parameter Efficiency</strong><span class="results-domain-label"> · Coding</span></span></button>
+            <button class="results-selector" type="button" data-result-index="2" aria-controls="results-deep-research" aria-pressed="false"><span><strong>Parameter Efficiency</strong><span class="results-domain-label"> · Deep Research</span></span></button>
+            <button class="results-playback" type="button" aria-label="Pause automatic figure rotation" title="Pause automatic figure rotation">
+              <svg class="results-pause-icon" viewBox="0 0 16 16" aria-hidden="true"><path d="M5.5 4v8M10.5 4v8"/></svg>
+              <svg class="results-play-icon" viewBox="0 0 16 16" aria-hidden="true"><path d="m6 4 6 4-6 4Z"/></svg>
+            </button>
+          </div>
+          <figcaption class="results-captions">
+            <span class="results-caption is-active" data-result-caption>
+              <span>Six evaluations of coding, deep research, and agentic reasoning.</span>
+              <span class="figure-meta">AREX-2 · 27B</span>
+              <span class="figure-note">MLE: Any Medal, averaged over three seeds, with skills. DeepSearchQA: F1. HLE: text-only, except GPT-5.5 (full set).</span>
+            </span>
+            <span class="results-caption" data-result-caption aria-hidden="true">
+              <span>Algorithmic and machine learning coding performance, compared with models of other sizes.</span>
+              <span class="figure-meta">AREX-2 · 27B</span>
+              <span class="figure-note">MLE and Frontier-CS. Model parameters are shown on a logarithmic scale.</span>
+            </span>
+            <span class="results-caption" data-result-caption aria-hidden="true">
+              <span>Deep research performance, compared with models of other sizes.</span>
+              <span class="figure-meta">AREX-2 · 27B</span>
+              <span class="figure-note">BrowseComp and DeepSearchQA. Model parameters are shown on a logarithmic scale.</span>
+            </span>
           </figcaption>
           <p class="figure-scroll-hint">Scroll horizontally to explore the figure <span aria-hidden="true">↔</span></p>
         </figure>
@@ -195,7 +238,7 @@
       <div class="demo-view" id="demo-view" tabindex="-1">
         <div class="demo-toolbar">
           <a href="#idea" class="demo-back"><span aria-hidden="true">←</span> Back to research</a>
-          <span>AREX-2 <span aria-hidden="true">/</span> Interactive demo</span>
+          <span>AREX-2 <span aria-hidden="true">/</span> <span id="demo-view-label">Interactive demo</span></span>
         </div>
         <div class="demo-heading-wrap section-shell">
           <header class="section-copy">
