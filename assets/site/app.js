@@ -1,4 +1,4 @@
-/* Title, the improvement loop and curve, section navigation, and the recorded demo. */
+/* Title, results carousel, improvement loop, section navigation, and the recorded demo. */
 (() => {
   'use strict';
 
@@ -66,6 +66,102 @@
   reducedMotion.addEventListener('change', resetTitle);
   resetTitle();
 
+  const results = document.getElementById('results');
+  const resultsViewport = results.querySelector('.results-viewport');
+  const resultSlides = [...results.querySelectorAll('[data-result-slide]')];
+  const resultCaptions = [...results.querySelectorAll('[data-result-caption]')];
+  const resultSelectors = [...results.querySelectorAll('[data-result-index]')];
+  const resultPlayback = results.querySelector('.results-playback');
+  let resultIndex = 0;
+  let resultTimer = 0;
+  let resultsVisible = false;
+  let resultsHovered = false;
+  let resultsFocusPaused = false;
+  let resultsRotating = !reducedMotion.matches;
+
+  const scheduleResults = () => {
+    clearTimeout(resultTimer);
+    resultPlayback.classList.toggle('is-paused', !resultsRotating);
+    const label = resultsRotating ? 'Pause automatic figure rotation' : 'Start automatic figure rotation';
+    resultPlayback.setAttribute('aria-label', label);
+    resultPlayback.title = label;
+    if (!resultsRotating || !resultsVisible || resultsHovered || resultsFocusPaused || document.hidden) return;
+    resultTimer = setTimeout(() => {
+      const next = (resultIndex + 1) % resultSlides.length;
+      const nextImages = [...resultSlides[next].querySelectorAll('img')];
+      // Keep the current figure visible until every image in the next slide is ready.
+      if (nextImages.every(image => image.complete && image.naturalWidth)) showResult(next);
+      scheduleResults();
+    }, 4000);
+  };
+  const showResult = index => {
+    resultIndex = index;
+    results.dataset.activeResult = String(index);
+    resultSlides.forEach((slide, i) => {
+      const active = i === index;
+      slide.classList.toggle('is-active', active);
+      slide.setAttribute('aria-hidden', String(!active));
+      slide.inert = !active;
+      resultCaptions[i].classList.toggle('is-active', active);
+      resultCaptions[i].setAttribute('aria-hidden', String(!active));
+      resultSelectors[i].setAttribute('aria-pressed', String(active));
+    });
+    resultsViewport.scrollLeft = 0;
+  };
+  const selectResult = index => {
+    resultsRotating = false;
+    showResult(index);
+    scheduleResults();
+  };
+  resultSelectors.forEach((button, index) => {
+    button.addEventListener('click', () => selectResult(index));
+    button.addEventListener('keydown', event => {
+      const directions = {ArrowLeft: -1, ArrowRight: 1};
+      if (!(event.key in directions)) return;
+      event.preventDefault();
+      const next = (index + directions[event.key] + resultSlides.length) % resultSlides.length;
+      resultSelectors[next].focus();
+      selectResult(next);
+    });
+  });
+  resultPlayback.addEventListener('click', () => {
+    resultsRotating = !resultsRotating;
+    if (resultsRotating) resultsFocusPaused = false;
+    scheduleResults();
+  });
+  results.addEventListener('pointerenter', event => {
+    if (event.pointerType === 'touch') return;
+    resultsHovered = true;
+    scheduleResults();
+  });
+  results.addEventListener('pointerleave', () => {
+    resultsHovered = false;
+    scheduleResults();
+  });
+  resultsViewport.addEventListener('pointerdown', () => {
+    resultsRotating = false;
+    scheduleResults();
+  });
+  results.addEventListener('focusin', () => {
+    resultsFocusPaused = true;
+    scheduleResults();
+  });
+  results.addEventListener('focusout', () => setTimeout(() => {
+    if (!results.contains(document.activeElement)) resultsFocusPaused = false;
+    scheduleResults();
+  }, 0));
+  document.addEventListener('visibilitychange', scheduleResults);
+  reducedMotion.addEventListener('change', () => {
+    if (reducedMotion.matches) resultsRotating = false;
+    scheduleResults();
+  });
+  new IntersectionObserver(entries => {
+    resultsVisible = entries[0].isIntersecting && entries[0].intersectionRatio >= .25;
+    scheduleResults();
+  }, {threshold: [0, .25]}).observe(resultsViewport);
+  results.querySelector('.results-controls').hidden = false;
+  scheduleResults();
+
   const progressPlot = document.querySelector('.progress-illustration');
   const curve = document.getElementById('progress-curve');
   const reveal = document.getElementById('progress-reveal');
@@ -129,10 +225,12 @@
   const demoView = document.getElementById('demo-view');
   const demo = document.getElementById('run-demo');
   const demoToolbar = document.querySelector('.demo-toolbar');
+  const demoViewLabel = document.getElementById('demo-view-label');
   const precedingContent = [...document.querySelectorAll('#main-content > :not(#demo), .site-footer')];
   const targetOrigin = location.origin === 'null' ? '*' : location.origin;
   let frame = 0;
   let demoOpen = false;
+  let demoScrollDocument = null;
 
   root.classList.add('demo-view-enabled');
   demoView.inert = true;
@@ -144,13 +242,39 @@
     const height = Math.max(580, innerHeight - demoToolbar.offsetHeight - 44);
     demo.contentWindow?.postMessage({type: 'arex-demo:viewport', height}, targetOrigin);
   };
+  // While the demo slides into view, scroll the page instead of the iframe.
+  const bindDemoScroll = () => {
+    const frameDocument = demo.contentDocument;
+    if (!frameDocument || frameDocument === demoScrollDocument) return;
+    demoScrollDocument = frameDocument;
+    frameDocument.addEventListener('wheel', event => {
+      if (demoOpen || event.ctrlKey || !event.deltaY) return;
+      event.preventDefault();
+      const unit = event.deltaMode === 1 ? 16 : event.deltaMode === 2 ? innerHeight : 1;
+      scrollBy({top: event.deltaY * unit, behavior: 'instant'});
+    }, {passive: false});
+    let touchY = null;
+    frameDocument.addEventListener('touchstart', event => {
+      touchY = !demoOpen && event.touches.length === 1 ? event.touches[0].screenY : null;
+    }, {passive: true});
+    frameDocument.addEventListener('touchmove', event => {
+      if (touchY === null || event.touches.length !== 1) { touchY = null; return; }
+      const nextY = event.touches[0].screenY;
+      const delta = touchY - nextY;
+      touchY = nextY;
+      event.preventDefault();
+      (demoOpen ? demoView : window).scrollBy({top: delta, behavior: 'instant'});
+    }, {passive: false});
+    const endTouch = () => { touchY = null; };
+    frameDocument.addEventListener('touchend', endTouch, {passive: true});
+    frameDocument.addEventListener('touchcancel', endTouch, {passive: true});
+  };
   const setDemoOpen = open => {
     if (open === demoOpen) return;
     const hadDemoFocus = demoView.contains(document.activeElement);
     demoOpen = open;
     root.classList.toggle('demo-is-open', open);
     header.inert = open;
-    demoView.inert = !open;
     precedingContent.forEach(section => { section.inert = open; });
     if (open) {
       demoView.scrollTop = 0;
@@ -169,8 +293,12 @@
     root.style.setProperty('--demo-offset', `${demoOffset}px`);
     root.style.setProperty('--demo-progress', String(demoProgress));
     root.style.setProperty('--page-opacity', String(1 - demoProgress));
-    root.classList.toggle('demo-is-visible', demoProgress > 0);
+    const wasVisible = root.classList.contains('demo-is-visible');
+    const visible = demoProgress > 0;
+    root.classList.toggle('demo-is-visible', visible);
+    demoView.inert = !visible;
     setDemoOpen(demoOffset < 1);
+    if (wasVisible && !visible) syncDemoPlayback();
 
     let active = demoOpen ? demoSection : undefined;
     if (!demoOpen) {
@@ -192,9 +320,12 @@
   });
   window.addEventListener('load', schedule);
   window.addEventListener('hashchange', schedule);
-  demo.addEventListener('load', () => { sizeDemo(); syncDemoPlayback(); });
+  demo.addEventListener('load', () => { bindDemoScroll(); sizeDemo(); syncDemoPlayback(); });
   window.addEventListener('message', event => {
     if (event.source !== demo.contentWindow || event.origin !== location.origin) return;
+    if (event.data?.type === 'arex-demo:view' && ['replay','video'].includes(event.data.view)) {
+      demoViewLabel.textContent = event.data.view === 'video' ? 'Demo video' : 'Interactive demo';
+    }
     if (event.data?.type === 'arex-demo:size' && Number.isFinite(event.data.height)) {
       demo.style.height = `${Math.max(320, Math.min(2400, event.data.height))}px`;
       schedule();
@@ -202,6 +333,7 @@
   });
   // Figures and web fonts can change section positions without a window resize.
   new ResizeObserver(schedule).observe(document.getElementById('main-content'));
+  bindDemoScroll();
   sizeDemo();
   update();
 })();
