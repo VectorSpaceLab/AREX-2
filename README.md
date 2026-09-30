@@ -4,7 +4,7 @@
   <p><strong>AREX Team · Beijing Academy of Artificial Intelligence (BAAI)</strong></p>
   <p>
     <a href="https://huggingface.co/BAAI/AREX-2"><img src="https://img.shields.io/badge/Model-Hugging%20Face-FFD21E?logo=huggingface&logoColor=111827" alt="Model on Hugging Face"></a>
-    <a href="https://arxiv.org/abs/2607.21461"><img src="https://img.shields.io/badge/Paper-arXiv-B31B1B?logo=arxiv&logoColor=white" alt="Paper on arXiv"></a>
+    <a href="docs/arex2_paper.pdf"><img src="https://img.shields.io/badge/Paper-PDF-B31B1B" alt="AREX-2 paper (PDF)"></a>
   </p>
 </div>
 
@@ -23,6 +23,7 @@ This repository contains the evaluation runners and dataset definitions for the 
 evaluation/   CLI, evaluation adapters, and the pinned evaluator snapshots
 data/         dataset configs, preparation catalog, and per-dataset notes
 assets/       benchmark PDF/SVG, logo files, and the static project site
+docs/         AREX-2 paper PDF
 scripts/      download scripts, run configs, and algorithmic experiments
 evaluate.py   short root-level wrapper for selecting research datasets
 ```

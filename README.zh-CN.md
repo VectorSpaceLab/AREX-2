@@ -4,7 +4,7 @@
   <p><strong>AREX Team · Beijing Academy of Artificial Intelligence (BAAI)</strong></p>
   <p>
     <a href="https://huggingface.co/BAAI/AREX-2"><img src="https://img.shields.io/badge/Model-Hugging%20Face-FFD21E?logo=huggingface&logoColor=111827" alt="Hugging Face 模型"></a>
-    <a href="https://arxiv.org/abs/2607.21461"><img src="https://img.shields.io/badge/Paper-arXiv-B31B1B?logo=arxiv&logoColor=white" alt="arXiv 论文"></a>
+    <a href="docs/arex2_paper.pdf"><img src="https://img.shields.io/badge/Paper-PDF-B31B1B" alt="AREX-2 论文（PDF）"></a>
   </p>
 </div>
 
@@ -23,6 +23,7 @@ AREX-2 研究智能体能否把更多测试时迭代转化为更好的解。论�
 evaluation/   CLI、评测适配器和固定版本的评测器
 data/         数据集配置、准备清单和逐数据集说明
 assets/       benchmark PDF/SVG、logo 和项目主页
+docs/         AREX-2 论文 PDF
 scripts/      下载脚本、运行配置和算法题实验
 evaluate.py   选择 research 数据集的根目录快捷入口
 ```
