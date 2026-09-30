@@ -13,7 +13,10 @@
 <div class="app">
 
 <div class="demo-deck" id="demoDeck">
-<nav aria-label="Demo sections" class="stage-nav">
+<nav aria-label="Demo views" class="stage-nav demo-view-nav">
+<div class="stage-links"><button aria-controls="interactiveNav statementScene approachScene trajectoryScene" aria-current="page" class="active" id="interactiveTab">Interactive Demo</button><button aria-controls="videoScene" id="videoTab">Demo Video</button></div>
+</nav>
+<nav aria-label="Interactive demo sections" class="stage-nav" id="interactiveNav">
 <div class="stage-links"><button data-stage="statement">The task</button><button data-stage="approach">The method</button><button class="active" data-stage="trajectory">The trajectory</button></div>
 <div class="stage-actions"><span class="reconstruction-label">Recorded run · Problem 164</span></div>
 </nav>
@@ -64,10 +67,15 @@
 <div class="event-browser" hidden="" id="eventBrowser"><div class="event-browser-head"><strong>Run events</strong><button aria-label="Close event list" class="icon-button" id="closeEvents">×</button></div><div class="event-filters"><button class="active" data-filter="all">All</button><button data-filter="submission">Submissions</button><button data-filter="edit">Edits</button><button data-filter="write">Writes</button></div><input aria-label="Search events" id="eventSearch" placeholder="Search algorithm or file…" type="search"/><div class="event-list" id="eventList"></div></div>
 </aside>
 </section>
+<section aria-label="Full demo video" class="scene video-scene" hidden="" id="videoScene">
+<video aria-label="AREX-2 demo, from the task introduction through the complete recorded trajectory" controls="" data-src="media/arex-2-demo.mp4" data-poster="media/arex-2-demo-poster.jpg" id="demoVideo" playsinline="" preload="none">
+Your browser does not support embedded video. <a href="media/arex-2-demo.mp4">Download the demo video.</a>
+</video>
+</section>
 </main>
 <div class="narrative-line"><span class="caption-index" id="captionIndex">THE SEARCH</span><p id="caption">Follow the solution.cpp writes and edits across the exploration, then inspect each submitted candidate.</p></div>
 <footer class="playback-bar">
-<div class="playback-main"><button aria-label="Play demo" class="play-button" id="playButton"><svg aria-hidden="true" viewbox="0 0 20 20"><path d="M6 3.5L16 10 6 16.5Z"></path></svg><span>Play demo</span></button><button aria-label="Restart demo" class="restart-button" id="restartButton" title="Restart demo">↺</button><div aria-label="Replay mode" class="mode-switch"><button aria-pressed="true" class="active" id="playbackMode">Playback</button><button aria-pressed="false" id="exploreMode">Explore</button></div><div class="scrubber"><div class="scrubber-labels"><span id="timeLabel">00:09 <span>/ 00:29</span></span><span id="elapsedLabel">Run time 00:00:00 · condensed replay</span></div><input aria-label="Replay position" id="timeline" max="59.54563073318357" min="0" step="0.01" type="range" value="18"/></div><label class="speed-control"><span>Speed</span><select aria-label="Playback speed" id="speedSelect"><option value="0.25">0.25×</option><option value="0.5">0.5×</option><option selected="" value="1">1×</option><option value="2">2×</option><option value="4">4×</option><option value="8">8×</option></select></label></div>
+<div class="playback-main"><button aria-label="Play demo" class="play-button" id="playButton"><svg aria-hidden="true" viewbox="0 0 20 20"><path d="M6 3.5L16 10 6 16.5Z"></path></svg><span>Play demo</span></button><button aria-label="Restart demo" class="restart-button" id="restartButton" title="Restart demo">↺</button><div aria-label="Replay mode" class="mode-switch"><button aria-pressed="true" class="active" id="playbackMode">Playback</button><button aria-pressed="false" id="exploreMode">Explore</button></div><div class="scrubber"><div class="scrubber-labels"><span id="timeLabel">00:09 <span>/ 00:24</span></span><span id="elapsedLabel">Run time 00:00:00 · condensed replay</span></div><input aria-label="Replay position" id="timeline" max="59.54563073318357" min="0" step="0.01" type="range" value="18"/></div><label class="speed-control"><span>Speed</span><select aria-label="Playback speed" id="speedSelect"><option value="0.25">0.25×</option><option value="0.5">0.5×</option><option selected="" value="1">1×</option><option value="2">2×</option><option value="4">4×</option><option value="8">8×</option></select></label></div>
 </footer>
 
 </div>
@@ -81,6 +89,7 @@
 <script src="vendor/dompurify/purify.min.js"></script>
 <script src="vendor/katex/katex.min.js"></script>
 <script src="vendor/katex/auto-render.min.js"></script>
+<script id="recording-config" type="application/json">{"duration":64,"trajectoryEnd":60,"previewTimes":[0,3.5,6.5,12,18.5,27,39,49,57.5,63]}</script>
 <script src="app.js"></script>
 
 </body>
