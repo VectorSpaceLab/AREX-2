@@ -4,7 +4,7 @@
   <p><strong>AREX Team · Beijing Academy of Artificial Intelligence (BAAI)</strong></p>
   <p>
     <a href="https://huggingface.co/BAAI/AREX-2"><img src="https://img.shields.io/badge/Model-Hugging%20Face-FFD21E?logo=huggingface&logoColor=111827" alt="Model on Hugging Face"></a>
-    <a href="docs/arex2_paper.pdf"><img src="https://img.shields.io/badge/Paper-PDF-B31B1B" alt="AREX-2 paper (PDF)"></a>
+    <a href="https://arxiv.org/abs/2609.38288"><img src="https://img.shields.io/badge/Paper-arXiv-B31B1B" alt="AREX-2 paper on arXiv"></a>
   </p>
 </div>
 
@@ -142,11 +142,11 @@ The final number comes from the host grader (`grade.log`), including `valid_subm
 If AREX is useful in your work, please cite:
 
 ```bibtex
-@article{lu2026arex,
-  title   = {AREX: Towards a Recursively Self-Improving Agent for Deep Research},
-  author  = {Lu, Shuqi and Li, Chaofan and Luo, Kun and Zhang, Zhang and Wang, Hui and Xiao, Hongwang and Xiong, Lei and Wang, Jiahao and Wang, Sen and Jiang, Xiyan and Li, Wanli and Hu, Yuyang and Qian, Hongjin and Yan, Bingyu and Chen, Jianlyu and Xia, Ziyi and Shao, Yingxia and Liu, Kang and Dou, Zhicheng and He, Di and Li, Chaozhuo and Ye, Qiwei and Wang, Zhongyuan and Liu, Zheng},
-  journal = {arXiv preprint arXiv:2607.21461},
+@article{2026arex2,
+  title   = {AREX-2: Advancing Self-Improving Agents through Long-Horizon Reflective Tasks},
+  author  = {Qian, Hongjin and Li, Chaofan and Luo, Kun and Wei, Wenqing and Chen, Jianlyu and Lu, Shuqi and Hu, Yuyang and Xiao, Hongwang and Wang, Hui and Li, Chaozhuo and Ye, Qiwei and Dou, Zhicheng and Lian, Defu and Liu, Zheng},
+  journal = {arXiv preprint arXiv:2609.38288},
   year    = {2026},
-  url     = {https://arxiv.org/abs/2607.21461}
+  url     = {https://arxiv.org/abs/2609.38288}
 }
 ```
