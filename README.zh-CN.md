@@ -23,7 +23,7 @@ AREX-2 研究智能体能否把更多测试时迭代转化为更好的解。论�
 evaluation/   CLI、各 benchmark 实现、judge 服务和第三方快照
 data/         数据集配置、准备清单和逐数据集说明
 assets/       benchmark PDF/SVG、logo 和项目主页
-docs/         论文 PDF 和详细评测说明
+docs/         详细评测说明
 scripts/      下载脚本、运行配置和算法题实验
 evaluate.py   选择 research 数据集的根目录快捷入口
 ```
