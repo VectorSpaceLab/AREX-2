@@ -23,7 +23,7 @@ This repository contains the evaluation runners and dataset definitions for the 
 evaluation/   CLI, benchmark implementations, judge services, and vendor snapshots
 data/         dataset configs, preparation catalog, and per-dataset notes
 assets/       benchmark PDF/SVG, logo files, and the static project site
-docs/         paper PDF and detailed evaluation notes
+docs/         detailed evaluation notes
 scripts/      download scripts, run configs, and algorithmic experiments
 evaluate.py   short root-level wrapper for selecting research datasets
 ```
